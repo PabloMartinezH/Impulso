@@ -3,17 +3,21 @@ package impulso
 import grails.plugins.springsecurity.Secured;
 
 class CitaController {
-
+    
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
     def springSecurityService
-
+    
+    @Secured(['ROLE_ADMIN_IM','ROLE_OPERA_IM','ROLE_OPERA_P','ROLE_SUPER_P','ROLE_CONSUL_S','IS_AUTHENTICATED_FULLY'])
     def index = {
         redirect(action: "list", params: params)
     }
-
+    
+    @Secured(['ROLE_ADMIN_IM','ROLE_OPERA_IM','ROLE_OPERA_P','ROLE_SUPER_P','ROLE_CONSUL_S','IS_AUTHENTICATED_FULLY'])
     def list = {
         params.max = Math.min(params.max ? params.int('max') : 300, 300)
         
+        System.out.println("list-cita: params: "+params)
+        
         Date date = new Date();
         java.text.SimpleDateFormat sdf=new java.text.SimpleDateFormat("yyyy-MM-dd")
         String fechaActual = sdf.format(date);
@@ -21,10 +25,29 @@ class CitaController {
         
         def query = "from Cita as c where "
         boolean fechaCita = false;
-
-        if(params.nombre==null && params.fechaCita == null){
-            query +=  "((c.fechaCita='"+fechaActual+"')"
-            fechaCita = true
+        
+        def queryUser = "from Usuario as u where u.username='"+springSecurityService.principal.username+"'"
+        System.out.println("query-usuario: "+queryUser)
+        def usuario = Usuario.find(queryUser)
+        System.out.println("usuario: "+usuario)
+        def rol = usuario.rol.authority
+        System.out.println("rol: "+rol)
+            
+        if(params.nombre==null 
+            && params.fechaCita == null
+            && params.idOficina == null){
+            ArrayList<Cita> citaInstanceListVacio = new ArrayList<Cita>()
+                
+            [citaInstanceList:citaInstanceListVacio]
+            /*query +=  "((c.fechaCita='"+fechaActual+"')"
+            if(!rol.equals("ROLE_ADMIN_IM") &&
+            !rol.equals("ROLE_OPERA_IM") &&
+            !rol.equals("ROLE_CONSUL_S")) {
+            query += " AND (c.oficina = '"+getOficina()+"'))"
+            }else {
+            query += ")"
+            }
+            fechaCita = true*/
         }else {
             boolean nombre = false;
             if(!(params.nombre).isEmpty()){
@@ -32,113 +55,6 @@ class CitaController {
                 nombre = true
             }
             if(!(params.fechaCita).isEmpty()) {
-                fechaCita = true
-                if(nombre) {
-                    query +=  "and (c.fechaCita='"+params.fechaCita+"'))"
-                }else {
-                    query +=  "((c.fechaCita='"+params.fechaCita+"')"
-                }
-            }
-        }
-        
-         query += " AND (c.oficina = '"+getOficina()+"'))"
-        
-        if(fechaCita) {
-            query += " order by c.horaCita"
-        }else {
-            query += " order by c.fechaCita"
-        }
-        
-        System.out.println("Query-buscar-citas: "+query)
-        [citaInstanceList: Cita.findAll(query)]
-    }
-
-    
-     def listRecepDocs = {
-        params.max = Math.min(params.max ? params.int('max') : 500, 500)
-        
-        System.out.println("fechaCita: "+params.fechaCita)
-        System.out.println("nombre: "+params.nombre)
-        
-        
-        
-        Date date = new Date();
-        java.text.SimpleDateFormat sdf=new java.text.SimpleDateFormat("yyyy-MM-dd")
-        String fechaActual = sdf.format(date);
-        System.out.println("fechaActual: "+fechaActual)
-        
-        def query = "from Cita as c where "
-        boolean fechaCita = false;
-        
-         
-        if(params.nombre==null && params.fechaCita == null){
-            System.out.println("params.nombre==null && params.fechaCita == null")
-            query +=  "(c.fechaCita='"+fechaActual+"')"
-            fechaCita = true
-        }else {
-            boolean nombre = false;
-            if(!(params.nombre).isEmpty()){
-                System.out.println("!(params.nombre).isEmpty()")
-                query +=  "(c.paciente.nombre like '%"+params.nombre+"%' OR c.paciente.apePaterno like '%"+params.nombre+"%')"
-                nombre = true
-            }
-            if(!(params.fechaCita).isEmpty()) {
-                System.out.println("!(params.fechaCita).isEmpty()")
-                fechaCita = true
-                if(nombre) {
-                    query +=  "AND (c.fechaCita='"+params.fechaCita+"')"
-                }else {
-                    query +=  "(c.fechaCita='"+params.fechaCita+"')"
-                }
-            }
-        }
-        
-        query += " AND ((c.paciente.estado.secuencia="+1+")"+
-                 " OR (c.paciente.estado.secuencia="+2+")"+
-                 " OR (c.paciente.estado.secuencia="+3+"))"
-        query += " AND (c.status = 'PROGRAMADA')"
-        query += " AND (c.oficina = '"+getOficina()+"'))"
-        
-        if(fechaCita) {
-            query += " order by c.horaCita"
-        }else {
-            query += " order by c.fechaCita"
-        }
-        
-        System.out.println("Query-buscar-citas: "+query)
-        [citaInstanceList: Cita.findAll(query)]
-    }
-    
-
-    def listEntregaAA = {
-        System.out.println("CONTROLLER-listEntregaAA")
-        params.max = Math.min(params.max ? params.int('max') : 500, 500)
-        
-        System.out.println("fechaCita: "+params.fechaCita)
-        System.out.println("nombre: "+params.nombre)
-        
-        Date date = new Date();
-        java.text.SimpleDateFormat sdf=new java.text.SimpleDateFormat("yyyy-MM-dd")
-        String fechaActual = sdf.format(date);
-        System.out.println("fechaActual: "+fechaActual)
-        
-        def query = "from Cita as c where "
-        boolean fechaCita = false;
-        
-         
-        if(params.nombre==null && params.fechaCita == null){
-            System.out.println("params.nombre==null && params.fechaCita == null")
-            query +=  "((c.fechaCita='"+fechaActual+"')"
-            fechaCita = true
-        }else {
-            boolean nombre = false;
-            if(!(params.nombre).isEmpty()){
-                System.out.println("!(params.nombre).isEmpty()")
-                query +=  "((c.paciente.nombre like '%"+params.nombre+"%' OR c.paciente.apePaterno like '%"+params.nombre+"%')"
-                nombre = true
-            }
-            if(!(params.fechaCita).isEmpty()) {
-                System.out.println("!(params.fechaCita).isEmpty()")
                 fechaCita = true
                 if(nombre) {
                     query +=  "and (c.fechaCita='"+params.fechaCita+"')"
@@ -146,29 +62,249 @@ class CitaController {
                     query +=  "((c.fechaCita='"+params.fechaCita+"')"
                 }
             }
+            
+            if(rol.equals("ROLE_ADMIN_IM") || rol.equals("ROLE_OPERA_IM") || rol.equals("ROLE_CONSUL_S")) {
+                if((params.idOficina).isEmpty()) {
+                    // Cualquier oficina
+                }else {
+                    def oficina = Oficina.get(params.idOficina)
+                    if(fechaCita || nombre) {
+                        query +=  "and (c.oficina='"+oficina.sucursal+"')"
+                    }else {
+                        query +=  "(c.oficina='"+oficina.sucursal+"')"
+                    }
+                }
+            }else {
+                def sucursal = usuario.oficina.sucursal
+                if(fechaCita || nombre) {
+                    query +=  "and (c.oficina='"+sucursal+"')"
+                }else {
+                    query +=  "(c.oficina='"+sucursal+"')"
+                }
+            }
+            if(fechaCita) {
+                query += ") order by c.horaCita"
+            }else {
+                query += ") order by c.fechaCita"
+            }
+            System.out.println("Query-buscar-citas: "+query)
+            [citaInstanceList: Cita.findAll(query)]
+            
         }
-        
-        query += " AND ((c.paciente.estado.secuencia="+4+") OR (c.paciente.estado.secuencia="+5+"))"
-        query += " AND (c.status = 'PROGRAMADA')"
-        query += " AND (c.oficina = '"+getOficina()+"'))"
-        
+        /*
         if(fechaCita) {
-            query += " order by c.horaCita"
+        query += ") order by c.horaCita"
         }else {
-            query += " order by c.fechaCita"
-        }
+        query += ") order by c.fechaCita"
+        }*/
         
-        System.out.println("Query-buscar-citas: "+query)
-        [citaInstanceList: Cita.findAll(query)]
+        
+    }
+
+    @Secured(['ROLE_ADMIN_IM','ROLE_OPERA_IM','ROLE_OPERA_P','ROLE_SUPER_P','ROLE_CONSUL_S','IS_AUTHENTICATED_FULLY'])
+    def listRecepDocs = {
+        params.max = Math.min(params.max ? params.int('max') : 500, 500)
+        
+        System.out.println("fechaCita: "+params.fechaCita)
+        System.out.println("nombre: "+params.nombre)
+        
+        
+        /*
+        Date date = new Date();
+        java.text.SimpleDateFormat sdf=new java.text.SimpleDateFormat("yyyy-MM-dd")
+        String fechaActual = sdf.format(date);
+        System.out.println("fechaActual: "+fechaActual)*/
+        
+
+        if(params.nombre==null && 
+            params.fechaCita == null &&
+            params.idOficina == null){
+            
+            ArrayList<Cita> citaInstanceListVacio = new ArrayList<Cita>()
+            [citaInstanceList:citaInstanceListVacio]
+             
+            /*System.out.println("params.nombre==null && params.fechaCita == null")
+            query +=  "(c.fechaCita='"+fechaActual+"')"
+            fechaCita = true*/
+        }else {
+            def query = "from Cita as c where "
+            /*boolean nombre = false;*/
+            boolean fechaCita = false;
+            
+             query += " ((c.paciente.estado.secuencia="+1+")"+
+                 " OR (c.paciente.estado.secuencia="+2+")"+
+                 " OR (c.paciente.estado.secuencia="+3+"))"
+            query += " AND (c.status = 'PROGRAMADA')"
+            
+            
+            if(!(params.nombre).isEmpty()){
+                System.out.println("!(params.nombre).isEmpty()")
+                query +=  "AND (c.paciente.nombre like '%"+params.nombre+"%' OR c.paciente.apePaterno like '%"+params.nombre+"%')"
+                //nombre = true
+            }
+            if(!(params.fechaCita).isEmpty()) {
+                System.out.println("!(params.fechaCita).isEmpty()")
+                query +=  "AND (c.fechaCita='"+params.fechaCita+"')"
+                
+                fechaCita = true
+                /*
+                if(nombre) {
+                    query +=  "AND (c.fechaCita='"+params.fechaCita+"')"
+                }else {
+                    query +=  "(c.fechaCita='"+params.fechaCita+"')"
+                }*/
+            }
+            
+            def queryUser = "from Usuario as u where u.username='"+springSecurityService.principal.username+"'"
+            System.out.println("query-usuario: "+queryUser)
+            def usuario = Usuario.find(queryUser)
+            System.out.println("usuario: "+usuario)
+            def rol = usuario.rol.authority
+            System.out.println("rol: "+rol)
+
+            if(rol.equals("ROLE_ADMIN_IM") || rol.equals("ROLE_OPERA_IM") || rol.equals("ROLE_CONSUL_S")) {
+                if((params.idOficina).isEmpty()) {
+                    // Cualquier oficina
+                }else {
+                    def oficina = Oficina.get(params.idOficina)
+                    query +=  "and (c.oficina='"+oficina.sucursal+"')"
+                    /*
+                    if(fechaCita || nombre) {
+                        query +=  "and (c.oficina='"+oficina.sucursal+"')"
+                    }else {
+                        query +=  "(c.oficina='"+oficina.sucursal+"')"
+                    }*/
+                }
+            }else {
+                def sucursal = usuario.oficina.sucursal
+                query +=  "and (c.oficina='"+sucursal+"')"
+                /*
+                if(fechaCita || nombre) {
+                    query +=  "and (c.oficina='"+sucursal+"')"
+                }else {
+                    query +=  "(c.oficina='"+sucursal+"')"
+                }*/
+            }
+                    
+            if(fechaCita) {
+                query += " order by c.horaCita"
+            }else {
+                query += " order by c.fechaCita"
+            }
+        
+            System.out.println("Query-buscar-citas: "+query)
+            [citaInstanceList: Cita.findAll(query)]
+            
+            
+        }
+
     }
     
+    @Secured(['ROLE_ADMIN_IM','ROLE_OPERA_IM','ROLE_OPERA_P','ROLE_SUPER_P','ROLE_CONSUL_S','IS_AUTHENTICATED_FULLY'])
+    def listEntregaAA = {
+        System.out.println("CONTROLLER-listEntregaAA")
+        params.max = Math.min(params.max ? params.int('max') : 500, 500)
+        
+        System.out.println("fechaCita: "+params.fechaCita)
+        System.out.println("nombre: "+params.nombre)
+        
+        /* Date date = new Date();
+        java.text.SimpleDateFormat sdf=new java.text.SimpleDateFormat("yyyy-MM-dd")
+        String fechaActual = sdf.format(date);
+        System.out.println("fechaActual: "+fechaActual)*/
+        
+         
+        if(params.nombre==null && 
+            params.fechaCita == null &&
+            params.idOficina == null){
+            
+            ArrayList<Cita> citaInstanceListVacio = new ArrayList<Cita>()
+            [citaInstanceList:citaInstanceListVacio]
+            /*System.out.println("params.nombre==null && params.fechaCita == null")
+            query +=  "((c.fechaCita='"+fechaActual+"')"
+            fechaCita = true*/
+        }else {
+            def query = "from Cita as c where "
+            boolean nombre = false;
+            boolean fechaCita = false;
+            
+            query += " ((c.paciente.estado.secuencia="+4+") OR (c.paciente.estado.secuencia="+5+"))"
+            query += " AND (c.status = 'PROGRAMADA')"
+            
+            
+            if(!(params.nombre).isEmpty()){
+                System.out.println("!(params.nombre).isEmpty()")
+                query +=  "AND (c.paciente.nombre like '%"+params.nombre+"%' OR c.paciente.apePaterno like '%"+params.nombre+"%')"
+                //nombre = true
+            }
+            if(!(params.fechaCita).isEmpty()) {
+                query +=  "and (c.fechaCita='"+params.fechaCita+"')"
+                fechaCita = true
+                /*
+                System.out.println("!(params.fechaCita).isEmpty()")
+                fechaCita = true
+                if(nombre) {
+                    query +=  "and (c.fechaCita='"+params.fechaCita+"')"
+                }else {
+                    query +=  "((c.fechaCita='"+params.fechaCita+"')"
+                }*/
+            }
+            
+            
+        
+        
+            def queryUser = "from Usuario as u where u.username='"+springSecurityService.principal.username+"'"
+            System.out.println("query-usuario: "+queryUser)
+            def usuario = Usuario.find(queryUser)
+            System.out.println("usuario: "+usuario)
+            def rol = usuario.rol.authority
+            System.out.println("rol: "+rol)
+
+            if(rol.equals("ROLE_ADMIN_IM") || rol.equals("ROLE_OPERA_IM") || rol.equals("ROLE_CONSUL_S")) {
+                if((params.idOficina).isEmpty()) {
+                    // Cualquier oficina
+                }else {
+                    def oficina = Oficina.get(params.idOficina)
+                    query +=  "and (c.oficina='"+oficina.sucursal+"')"
+                    /*
+                    if(fechaCita || nombre) {
+                        query +=  "and (c.oficina='"+oficina.sucursal+"')"
+                    }else {
+                        query +=  "(c.oficina='"+oficina.sucursal+"')"
+                    }*/
+                }
+            }else {
+                def sucursal = usuario.oficina.sucursal
+                query +=  "and (c.oficina='"+sucursal+"')"
+                /*
+                if(fechaCita || nombre) {
+                    query +=  "and (c.oficina='"+sucursal+"')"
+                }else {
+                    query +=  "(c.oficina='"+sucursal+"')"
+                }*/
+            }
+        
+        
+            if(fechaCita) {
+                query += " order by c.horaCita"
+            }else {
+                query += " order by c.fechaCita"
+            }
+        
+            System.out.println("Query-buscar-citas: "+query)
+            [citaInstanceList: Cita.findAll(query)]
+        }
+
+    }
     
+    @Secured(['ROLE_ADMIN_IM','IS_AUTHENTICATED_FULLY'])
     def create = {
         def citaInstance = new Cita()
         citaInstance.properties = params
         return [citaInstance: citaInstance]
     }
 
+    @Secured(['ROLE_ADMIN_IM','IS_AUTHENTICATED_FULLY'])
     def save = {
         def fechaCita = params.fechaCita
         System.out.println("Params-fechaCita: "+fechaCita)
@@ -184,6 +320,7 @@ class CitaController {
         }
     }
 
+    @Secured(['ROLE_ADMIN_IM','ROLE_OPERA_IM','ROLE_OPERA_P','ROLE_SUPER_P','ROLE_CONSUL_S','IS_AUTHENTICATED_FULLY'])
     def show = {
         def citaInstance = Cita.get(params.id)
         if (!citaInstance) {
@@ -195,6 +332,7 @@ class CitaController {
         }
     }
 
+    @Secured(['ROLE_SUPER_P','IS_AUTHENTICATED_FULLY'])
     def edit = {
         def citaInstance = Cita.get(params.id)
         if (!citaInstance) {
@@ -206,6 +344,7 @@ class CitaController {
         }
     }
 
+    @Secured(['ROLE_SUPER_P','IS_AUTHENTICATED_FULLY'])
     def update = {
         def citaInstance = Cita.get(params.id)
         if (citaInstance) {
@@ -237,6 +376,7 @@ class CitaController {
         }
     }
 
+    @Secured(['ROLE_ADMIN_IM','IS_AUTHENTICATED_FULLY'])
     def delete = {
         def citaInstance = Cita.get(params.id)
         if (citaInstance) {
@@ -256,6 +396,7 @@ class CitaController {
         }
     }
     
+    @Secured(['ROLE_OPERA_P','ROLE_SUPER_P','IS_AUTHENTICATED_FULLY'])
     def programarCita = {
         System.out.println("Cita Controller - programarCita")
         System.out.println("params.idPaciente: "+params.idPaciente)
@@ -290,19 +431,16 @@ class CitaController {
                     mensaje="Se reprograma cita 'Entrega de Auxiliar Auditivo', debido a documentación incompleta."
                 }
             }else {
-                mensaje="Cancelar esta cita y re-programar otra cita."
+                mensaje="Cancelar cita y re-programar otra."
             }
             codigoTipoCita = cita.tipoCita
-            
         }
         
         System.out.println("codigoTipoCita: "+codigoTipoCita)
         
         render(view: "programarCita", 
-            model: [mensaje:mensaje,
-                razon:params.razon,
-                tipoCita:codigoTipoCita,
-                citaInstance:cita])
+            model: [mensaje:mensaje,razon:params.razon,
+                tipoCita:codigoTipoCita,citaInstance:cita])
     }
     
     private void setFechasHoras(def params) {
@@ -326,6 +464,7 @@ class CitaController {
         params.putAt("horaRegistro",hora+":"+minsStr)
     }
     
+    @Secured(['ROLE_OPERA_P','ROLE_SUPER_P','IS_AUTHENTICATED_FULLY'])
     def guardarCitaProgramada = {
         System.out.println("guardarCitaProgramada")
         System.out.println("tipoCita: "+params.tipoCita)
@@ -348,6 +487,7 @@ class CitaController {
             citaNew.estadoDocumentos = citaAnt.estadoDocumentos
             
             citaAnt.status = "CANCELADA"
+            citaAnt.razonCancelacion =  params.razonCancelacion
             citaAnt.fechaRegistro = params.fechaRegistro
             citaAnt.horaRegistro = params.horaRegistro
             params.putAt("numeroCita",new Integer(citas.size()+1))
@@ -403,11 +543,13 @@ class CitaController {
         return sucursal
     }
     
+    @Secured(['ROLE_OPERA_P','ROLE_SUPER_P','IS_AUTHENTICATED_FULLY'])
     def registrarCita = {
         def tiposPaciente = TipoPaciente.list(sort:"codigo", order:"desc")
         return [tiposPaciente: tiposPaciente]
     }
     
+    @Secured(['ROLE_OPERA_P','ROLE_SUPER_P','IS_AUTHENTICATED_FULLY'])
     def verificarDocs1erCita = {
         System.out.println("Controller - verificarDocs1erCita")
         
@@ -418,32 +560,45 @@ class CitaController {
         //def citas = paciente.citas
         //def ultimaCita = citas.size()
         /*def query = "from Cita as c where ((c.paciente.id='"+paciente.id+"')"+
-                    " and (c.tipoCita='ENTREGA DOCS Y MOLDES')"+
-                    " and (c.numeroCita="+ultimaCita+"))"*/
+        " and (c.tipoCita='ENTREGA DOCS Y MOLDES')"+
+        " and (c.numeroCita="+ultimaCita+"))"*/
         
         //System.out.println("query: "+query)
         //def citaAct = Cita.find(query)
+        
+        HashMap hm = new HashMap()
         
         def edoDocs = citaAct.estadoDocumentos
         def paciente = citaAct.paciente
         def docs = edoDocs.documentos
         docs.each() {
-             System.out.println("codigo: "+it.documento.codigoDoc)
-             System.out.println("query: "+it.status)
+            System.out.println("---------------")
+            System.out.println("codigo: "+it.documento.codigoDoc)
+            System.out.println("query: "+it.status)
+            System.out.println("it.ordenDoc: "+it.ordenDoc)
+            System.out.println("it: "+it)
+            hm.put(""+it.ordenDoc,it)
         }
         
-        render(view: "verificarDocs1erCita", model: [citaInstance:citaAct,pacienteInstance:paciente])
+        System.out.println("hm: "+hm)
+        System.out.println("hm: "+hm.get("1"))
+        
+        render(view: "verificarDocs1erCita", 
+            model: [citaInstance:citaAct,
+                pacienteInstance:paciente,
+                documentos:hm])
     }
     
-     def verificarDocs2daCita = {
+    @Secured(['ROLE_OPERA_P','ROLE_SUPER_P','IS_AUTHENTICATED_FULLY'])
+    def verificarDocs2daCita = {
         /*System.out.println("Controller - verificarDocs2daCita")
         def paciente = Paciente.get(params.idPaciente)
         
         def citas = paciente.citas
         def ultimaCita = citas.size()
         def query = "from Cita as c where ((c.paciente.id='"+paciente.id+"')"+
-                    " and (c.tipoCita='ENTREGA AUXILIAR AUD')"+
-                    " and (c.numeroCita="+ultimaCita+"))"
+        " and (c.tipoCita='ENTREGA AUXILIAR AUD')"+
+        " and (c.numeroCita="+ultimaCita+"))"
         
         System.out.println("query: "+query)*/
         
@@ -455,17 +610,19 @@ class CitaController {
         System.out.println("citaAct : "+citaAct)
         System.out.println("paciente : "+paciente.estado.secuencia)
         
+        HashMap hm = new HashMap()
         def edoDocs = citaAct.estadoDocumentos
         def docs = edoDocs.documentos
         docs.each() {
-             System.out.println("codigo: "+it.documento.codigoDoc)
-             System.out.println("query: "+it.status)
+            System.out.println("codigo: "+it.documento.codigoDoc)
+            System.out.println("query: "+it.status)
+            hm.put(""+it.ordenDoc,it)
         }
         
-        render(view: "verificarDocs2daCita", model: [citaInstance:citaAct,pacienteInstance:paciente])
+        render(view: "verificarDocs2daCita", model: [citaInstance:citaAct,pacienteInstance:paciente,documentos:hm])
     }
     
-    
+    @Secured(['ROLE_OPERA_P','ROLE_SUPER_P','IS_AUTHENTICATED_FULLY'])
     def guardarVerificarDocs2daCita = {
         System.out.println("Controller - guardarVerificarDocs2daCita")
         System.out.println("Docs : "+params)
@@ -493,15 +650,15 @@ class CitaController {
         paciente.addToCitas(cita)
         
         if(paciente.save(flush: true) ) {
-             redirect(action:"listEntregaAA",params:[fechaCita:params.fechaActual,nombre:paciente.nombre])
+            redirect(action:"listEntregaAA",params:[fechaCita:params.fechaActual,nombre:paciente.nombre])
         }else{
             paciente.errors.each {
                 println it
             }
         }
-        
     }
     
+    @Secured(['ROLE_OPERA_P','ROLE_SUPER_P','IS_AUTHENTICATED_FULLY'])
     def guardarVerificarDocs1erCita = {
         System.out.println("Controller - guardarVerificarDocs1erCita")
         System.out.println("Docs : "+params)
@@ -531,7 +688,7 @@ class CitaController {
         paciente.addToCitas(cita)
         
         if(paciente.save(flush: true) ) {
-             redirect(action:"listRecepDocs",params:[fechaCita:params.fechaActual,nombre:paciente.nombre])
+            redirect(action:"listRecepDocs",params:[fechaCita:params.fechaActual,nombre:paciente.nombre])
         }else{
             paciente.errors.each {
                 println it
@@ -544,7 +701,7 @@ class CitaController {
         def docs = Documento.findAll("from Documento as d where d.tipoCita.secuencia="+secCita+" order by d.ordenDoc")
         System.out.println("docs: "+docs)
         docs.each() {
-            def edoDoc = new EstadoDocumento(documento:it,status:false)
+            def edoDoc = new EstadoDocumento(documento:it,status:false,ordenDoc:it.ordenDoc)
             System.out.println("edoDoc.doc: "+edoDoc.documento)
             System.out.println("edoDoc.status: "+edoDoc.status)
             edoDocs.addToDocumentos(edoDoc)
@@ -559,6 +716,7 @@ class CitaController {
         }
     }
     
+    @Secured(['ROLE_OPERA_P','ROLE_SUPER_P','IS_AUTHENTICATED_FULLY'])
     def guardarCita = {
         System.out.println("guardarCita")
         System.out.println("params: "+params)
@@ -583,9 +741,6 @@ class CitaController {
         params.putAt("horaRegistro",hora+":"+minsStr)
         params.putAt("numeroCita",1)
         
-
-        //println("idAuxAud: "+params.idAuxAud)
-        
         def tipoAuxAud = TipoAuxAud.get(params.idTipoAuxAud)
 
         def cita = new Cita(
@@ -606,6 +761,8 @@ class CitaController {
         def paciente = new Paciente(nombre:params.nombre,
             apePaterno:params.apePaterno,
             apeMaterno:params.apeMaterno,
+            telefono:params.telefono,
+            celular:params.celular,
             sexo:params.sexo)
         
         def tipoPaciente = TipoPaciente.get(params.idTipoPaciente)

@@ -38,28 +38,19 @@
 
         <tr >
           <td class="etiqueta">
-            <label for="modeloAA"><g:message code="auxiliarAuditivo.modeloAA.label" default="Modelo AA" /></label>
+            <label for="marca"><g:message code="auxiliarAuditivo.marca.label" default="Marca" /></label>
           </td>
-          <td valign="top" class="value ${hasErrors(bean: auxiliarAuditivoInstance, field: 'modeloAA', 'errors')}">
-    <g:textField name="modeloAA" maxlength="20" value="${auxiliarAuditivoInstance?.modeloAA}" />
-          </td>
-        </tr>
-    
-        <tr >
-          <td class="etiqueta">
-            <label for="numeroAA"><g:message code="auxiliarAuditivo.numeroAA.label" default="Numero AA" /></label>
-          </td>
-          <td valign="top" class="value ${hasErrors(bean: auxiliarAuditivoInstance, field: 'numeroAA', 'errors')}">
-    <g:textField name="numeroAA" maxlength="2" value="${auxiliarAuditivoInstance?.numeroAA}" />
+          <td valign="top" class="value ${hasErrors(bean: auxiliarAuditivoInstance, field: 'marca', 'errors')}">
+    <g:textField name="marca" maxlength="100" value="${auxiliarAuditivoInstance?.marca}" />
           </td>
         </tr>
     
         <tr >
           <td class="etiqueta">
-            <label for="nombreAA"><g:message code="auxiliarAuditivo.nombreAA.label" default="Nombre AA" /></label>
+            <label for="tiposAuxAud"><g:message code="auxiliarAuditivo.tiposAuxAud.label" default="Tipos Aux Aud" /></label>
           </td>
-          <td valign="top" class="value ${hasErrors(bean: auxiliarAuditivoInstance, field: 'nombreAA', 'errors')}">
-    <g:textField name="nombreAA" maxlength="200" value="${auxiliarAuditivoInstance?.nombreAA}" />
+          <td valign="top" class="value ${hasErrors(bean: auxiliarAuditivoInstance, field: 'tiposAuxAud', 'errors')}">
+    <g:select name="tiposAuxAud" from="${impulso.TipoAuxAud.list()}" multiple="yes" optionKey="id" size="5" value="${auxiliarAuditivoInstance?.tiposAuxAud*.id}" />
           </td>
         </tr>
     

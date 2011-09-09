@@ -3,7 +3,6 @@ import impulso.ItemGrupoMenu
 import impulso.TipoPaciente
 import impulso.TipoCita
 import impulso.Documento
-import impulso.Empresa
 import impulso.TipoAuxAud
 import impulso.AuxiliarAuditivo
 import impulso.Estado
@@ -43,15 +42,15 @@ class BootStrap {
         if (!Documento.count() && !TipoCita.count()) {
             
             // Documentos
-            def doc1 = new Documento(ordenDoc:1,codigoDoc:"IFE",nombreDoc: "CREDENCIAL IFE",caracteristicas: "ORIGINAL Y 6 COPIAS POR AMBOS LADOS")
-            def doc2 = new Documento(ordenDoc:2,codigoDoc:"ISSFAM",nombreDoc: "IDENTIFICACION OFICIAL ISSFAM",caracteristicas: "ORIGINAL Y 6 COPIAS POR AMBOS LADOS")
-            def doc3 = new Documento(ordenDoc:3,codigoDoc:"RECETA",nombreDoc: "RECETA MEDICA",caracteristicas: "ORIGINAL Y 6 COPIAS POR AMBOS LADOS")
-            def doc4 = new Documento(ordenDoc:4,codigoDoc:"CARTA",nombreDoc: "CARTA DE AFILIACIÓN",caracteristicas: "ORIGINAL Y 6 COPIAS POR AMBOS LADOS. REQUERIDA CUANDO FALTA ISSFAM")
-            def doc5 = new Documento(ordenDoc:5,codigoDoc:"AUDIOGRAMA",nombreDoc: "AUDIOGRAMA",caracteristicas: "ORIGINAL Y 6 COPIAS POR AMBOS LADOS")
+            def doc1 = new Documento(ordenDoc:4,codigoDoc:"IFE",nombreDoc: "CREDENCIAL IFE",caracteristicas: "ORIGINAL Y 6 COPIAS POR AMBOS LADOS")
+            def doc2 = new Documento(ordenDoc:1,codigoDoc:"ISSFAM",nombreDoc: "IDENTIFICACION OFICIAL ISSFAM",caracteristicas: "ORIGINAL Y 6 COPIAS POR AMBOS LADOS")
+            def doc3 = new Documento(ordenDoc:2,codigoDoc:"RECETA",nombreDoc: "RECETA MEDICA",caracteristicas: "ORIGINAL Y 6 COPIAS POR AMBOS LADOS")
+            def doc4 = new Documento(ordenDoc:5,codigoDoc:"CARTA",nombreDoc: "CARTA DE AFILIACIÓN",caracteristicas: "ORIGINAL Y 6 COPIAS POR AMBOS LADOS")
+            def doc5 = new Documento(ordenDoc:3,codigoDoc:"AUDIOGRAMA",nombreDoc: "AUDIOGRAMA",caracteristicas: "ORIGINAL Y 6 COPIAS POR AMBOS LADOS")
             
             def doc6 = new Documento(ordenDoc:6,codigoDoc:"AUDIOGRAMA-PRO",nombreDoc: "AUDIOGRAMA PROVEEDOR",caracteristicas: "ORIGINAL Y 6 COPIAS")
-            def doc7 = new Documento(ordenDoc:7,codigoDoc:"CARTA-PODER",nombreDoc: "CARTA PODER",caracteristicas: "ORIGINAL Y 6 COPIAS. FIRMADA POR PACIENTE Y APODERADO, Y 2 TESTIGOS")
-            def doc8 = new Documento(ordenDoc:8,codigoDoc:"IDENTI-PACIENTE",nombreDoc: "IDENTIFICACIÓN DE PACIENTE",caracteristicas: "ORIGINAL Y 6 COPIAS")
+            def doc8 = new Documento(ordenDoc:7,codigoDoc:"IDENTI-PACIENTE",nombreDoc: "IDENTIFICACIÓN DE PACIENTE",caracteristicas: "ORIGINAL Y 6 COPIAS")
+            def doc7 = new Documento(ordenDoc:8,codigoDoc:"CARTA-PODER",nombreDoc: "CARTA PODER",caracteristicas: "ORIGINAL Y 6 COPIAS. FIRMADA POR PACIENTE Y APODERADO, Y 2 TESTIGOS")
             def doc9 = new Documento(ordenDoc:9,codigoDoc:"IDENTI-APODERADO",nombreDoc: "IDENTIFICACIÓN DE APODERADO",caracteristicas: "ORIGINAL Y 6 COPIAS")
             def doc10 = new Documento(ordenDoc:10,codigoDoc:"IDENTI-TESTIGOS",nombreDoc: "IDENTIFICACIÓN DE TESTIGOS",caracteristicas: "ORIGINAL Y 6 COPIAS")
             
@@ -95,10 +94,11 @@ class BootStrap {
         
         if (!TipoAuxAud.count()) {
             
-            def ta1 = new TipoAuxAud(modelo:"CURVETA-LMS",nombre:"AUXILIARES AUDITIVOS 100% DIGITALES TIPO CURVETA PARA PERDIDAS LEVES, MEDIAS, Y SEVERAS").save(failOnError: true)
-            def ta2 = new TipoAuxAud(modelo:"CURVETA-PRO",nombre:"AUXILIARES AUDITIVOS 100% DIGITALES TIPO CURVETA PARA PERDIDAS PROFUNDAS INCLUYENDO RESTOS AUDITIVOS").save(failOnError: true)
-            def ta3 = new TipoAuxAud(modelo:"CURVETA-ITC",nombre:"AUXILIARES AUDITIVOS 100% DIGITALES TIPO CURVETA HECHOS A LA MEDIDA, TIPO ITC PARA HIPOACUSIA LEVE Y MEDIA").save(failOnError: true)
-            def ta4 = new TipoAuxAud(modelo:"DIADEMA-VIB",nombre:"AUXILIARES AUDITIVOS TIPO DIADEMA CON UN VIBRADOR OSEO CON AUXILIAR AUDITIVO").save(failOnError: true)
+            def ta1 = new TipoAuxAud(modelo:"TEGO PRO BTE",descripcion:"AUXILIARES AUDITIVOS 100% DIGITALES TIPO CURVETA PARA PERDIDAS LEVES, MEDIAS Y SEVERAS RESPECTIVAMENTE, PROGRAMABLES DE 6 CANALES 6 BANDAS, CON OPCION DE ADAPTACION ABIERTA 'OPEN FIT' PARA HIPOACUSIA EN TONOS AGUDOS").save(failOnError: true)
+            def ta2 = new TipoAuxAud(modelo:"TEGO PRO BTE PW",descripcion:"AUXILIARES AUDITIVOS 100% DIGITALES TIPO CURVETA PARA PERDIDAS LEVES, MEDIAS Y SEVERAS RESPECTIVAMENTE, PROGRAMABLES DE 6 CANALES 6 BANDAS, CON OPCION DE ADAPTACION ABIERTA 'OPEN FIT' PARA HIPOACUSIA EN TONOS AGUDOS").save(failOnError: true)
+            def ta3 = new TipoAuxAud(modelo:"SUMO DM",descripcion:"TEGO PRO BTE / TEGO PRO BTE PW AUXILIARES AUDITIVOS 100% DIGITALES TIPO CURVETA PARA PERDIDAS PROFUNDAS INCLUYENDO RESTOS AUDITIVOS, PROGRAMABLES DE 6 CANALES").save(failOnError: true)
+            def ta4 = new TipoAuxAud(modelo:"TEGO PRO ITC",descripcion:"AUXILIARES AUDITIVOS 100% DIGITALES TIPO HECHOS A LA MEDIDA, TIPO ITC (INTRACANAL, IN THE CHANNEL) PARA HIPOACUSIA LEVE Y MEDIA PROGRAMABLES DE 6 CANALES 6 BANDAS; Y AUXILIARES AUDITIVOS 100% DIGITALES TIPO HECHOS A LA MEDIDA TIPO ITE ").save(failOnError: true)
+            def ta5 = new TipoAuxAud(modelo:"SUMO DM DIAD",descripcion:"AUXILIARES AUDITIVOS TIPO DIADEMA CON UN VIBRADOR OSEO CON AUXILIAR AUDITIVO.").save(failOnError: true)
           
             def aa1 = new AuxiliarAuditivo(marca:"BIOTRONIK")
             aa1.addToTiposAuxAud(ta1)
@@ -109,6 +109,7 @@ class BootStrap {
             aa2.addToTiposAuxAud(ta2)
             aa2.addToTiposAuxAud(ta3)
             aa2.addToTiposAuxAud(ta4)
+            aa2.addToTiposAuxAud(ta5)
             
             if(!aa1.save(flush: true) ) {
                 aa1.errors.each {
@@ -130,25 +131,25 @@ class BootStrap {
                 descripcion:"UN ESTUCHE.").save(failOnError: true)
             def ce2 = new CheckEntrega(
                 secuencia:2,necesario:true,
-                descripcion:"Un kit de limpieza.").save(failOnError: true)
+                descripcion:"UN KIT DE LIMPIEZA.").save(failOnError: true)
             def ce3 = new CheckEntrega(
                 secuencia:3,necesario:true,
-                descripcion:"Un deshumidificador reutilizable para evitar la formación de sales de óxido.").save(failOnError: true)
+                descripcion:"UN DESHUMIDIFICADOR REUTILIZABLE PARA EVITAR LA FORMACIÓN DE SALES DE ÓXIDO.").save(failOnError: true)
             def ce4 = new CheckEntrega(
                 secuencia:4,necesario:true,
-                descripcion:"Un probador de pilas.").save(failOnError: true)
+                descripcion:"UN PROBADOR DE PILAS.").save(failOnError: true)
             def ce5 = new CheckEntrega(
                 secuencia:5,necesario:true,
-                descripcion:"Seis paquetes con seis pilas cada uno.").save(failOnError: true)
+                descripcion:"SEIS PAQUETES CON SEIS PILAS CADA UNO.").save(failOnError: true)
             def ce6 = new CheckEntrega(
                 secuencia:6,necesario:true,
-                descripcion:"Un molde para el oído hecho a la medida.").save(failOnError: true)
+                descripcion:"UN MOLDE PARA EL OÍDO HECHO A LA MEDIDA.").save(failOnError: true)
             def ce7 = new CheckEntrega(
                 secuencia:7,necesario:false,
-                descripcion:"En caso de haber recibido auxiliar auditivo tipo ITC, se entregará dos kit de filtros para los auxiliares auditivos tipo hechos a la medida.").save(failOnError: true)
+                descripcion:"EN CASO DE HABER RECIBIDO AUXILIAR AUDITIVO TIPO ITC, SE ENTREGARÁ DOS KIT DE FILTROS PARA LOS AUXILIARES AUDITIVOS TIPO HECHOS A LA MEDIDA.").save(failOnError: true)
             def ce8 = new CheckEntrega(
                 secuencia:8,necesario:false,
-                descripcion:"Para pacientes pediátricos, se entregará sin costo extra un par de sujetadores y tres pares de moldes de silicón.").save(failOnError: true)
+                descripcion:"PARA PACIENTES PEDIÁTRICOS, SE ENTREGARÁ SIN COSTO EXTRA UN PAR DE SUJETADORES Y TRES PARES DE MOLDES DE SILICÓN.").save(failOnError: true)
         }
         
         
@@ -163,44 +164,75 @@ class BootStrap {
           // Roles
 
         def adminIRole = Rol.findByAuthority("ROLE_ADMIN_IM") ?: new Rol(authority: "ROLE_ADMIN_IM",nombre:"ROL ADMINISTRADOR").save(failOnError: true)
+        def operaIRole = Rol.findByAuthority("ROLE_OPERA_IM") ?: new Rol(authority: "ROLE_OPERA_IM",nombre:"ROL PARA ACTIVIDADES DEL OPERADOR DE IMPULSO MEXICANO").save(failOnError: true)
         def operaPRole = Rol.findByAuthority("ROLE_OPERA_P") ?: new Rol(authority: "ROLE_OPERA_P",nombre:"ROL PARA ACTIVIDADES DE OPERADOR DEL PROVEEDOR").save(failOnError: true)
         def superPRole = Rol.findByAuthority("ROLE_SUPER_P") ?: new Rol(authority: "ROLE_SUPER_P",nombre:"ROL PARA ACTIVIDADES DEL SUPERVISOR DEL PROVEEDOR").save(failOnError: true)
-        def operaIRole = Rol.findByAuthority("ROLE_OPERA_IM") ?: new Rol(authority: "ROLE_OPERA_IM",nombre:"ROL PARA ACTIVIDADES DEL OPERADOR DE IMPULSO MEXICANO").save(failOnError: true)
-        def consuIRole = Rol.findByAuthority("ROLE_CONSUL_IM") ?: new Rol(authority: "ROLE_CONSUL_IM",nombre:"ROL PARA ACTIVIDADES DE CONSULTA DE IMPULSO MEXICANO").save(failOnError: true)
         def consuSRole = Rol.findByAuthority("ROLE_CONSUL_S") ?: new Rol(authority: "ROLE_CONSUL_S",nombre:"ROL PARA ACTIVIDADES DE CONSULTA DE SEDENA").save(failOnError: true)
 
 
         // Oficinas
         if (!Oficina.count() && (!Usuario.count())) {
-                def ofi1 = new Oficina(sucursal:"GUADALAJARA",direccion:"Jesús García # 2447 int. 304 Col. Prados ProvidenciaGuadalajara Jalisco.")
-                def ofi2 = new Oficina(sucursal:"TAMPICO",direccion:"Médica Universidad Priv. Universidad #102, Col. HospitalRegional Tampico, Tamaulipas")
-                def ofi3 = new Oficina(sucursal:"IRAPUATO",direccion:"Av. Reforma #286 Consultorio 8 Fraccionamiento Gámez,Irapuato, Guanajuato")
-                def ofi4 = new Oficina(sucursal:"PUEBLA",direccion:"13 Sur # 1905 2do Piso – 7 Col. Santiago Puebla, Puebla")
-                def ofi5 = new Oficina(sucursal:"VERACRUZ",direccion:"VERACRUZ")
-                def ofi6 = new Oficina(sucursal:"IMPULSO",direccion:"DISTRITO FEDERAL")
-                def ofi7 = new Oficina(sucursal:"SEDENA",direccion:"DISTRITO FEDERAL")
+                def ofi1 = new Oficina(sucursal:"GUADALAJARA",direccion:"Dr. José Figueroa Sterling Tel. 01 (33) 3641 9380 y 01 (33) 3641 5359 Jesús García # 2447 int. 304 Col. Prados Providencia Guadalajara, Jalisco.").save(failOnError: true)
+                def ofi2 = new Oficina(sucursal:"TAMPICO",direccion:"Dra. Luz Minerva Cuesta Tel. 01 (833) 241 3639 Médica Universidad Priv. Universidad # 102, Col. Hospital Regional Tampico, Tamaulipas.").save(failOnError: true)
+                def ofi3 = new Oficina(sucursal:"IRAPUATO",direccion:"Ing. Santiago Cardozo Tel. 01 (462) 624 4628 Av. Reforma # 286 Consultorio 8 Fraccionamiento Gámez, Irapuato, Guanajuato.").save(failOnError: true)
+                def ofi4 = new Oficina(sucursal:"PUEBLA",direccion:"Dra. Pilar Pérez Tel. 01 (222) 237 1066 - 503 13 Sur # 1905 2do Piso- 7 Col. Santiago Puebla, Puebla").save(failOnError: true)
+                def ofi5 = new Oficina(sucursal:"VERACRUZ",direccion:"Dra. Rosina Figueroa Campos, Av. 20 de Noviembre 2716, esq. Iglesia y Colón Tel: 012299808822").save(failOnError: true)
+                def ofi6 = new Oficina(sucursal:"CD. DE MEXICO",direccion:"Representaciones y Distribuciones Del Rello SA de CV Tel. 56871717 Magdalena 111, entre Romero de Terreros y Luz Saviñon Col. Del Valle DF.").save(failOnError: true)
                 
                 // Usuarios
-                def usu1 = new Usuario(nombre:"ALFREDO ZAMORA",empresa:"IMPULSO",username:"ALFREDO",password:"ALFREDO",enabled:true)
-                def usu2 = new Usuario(nombre:"DAVID ROJAS",empresa:"RDR",username:"DAVID",password:"DAVID",enabled:true)   
-                def usu3 = new Usuario(nombre:"JULIAN LEON",empresa:"RDR",username:"JULIAN",password:"JULIAN",enabled:true)   
+                def usu1 = new Usuario(nombre:"DAVID",empresa:"IMPULSO",username:"DAVID",password:"DAVID",enabled:true)
+                def usu2 = new Usuario(nombre:"ALFREDO",empresa:"IMPULSO",username:"ALFREDO",password:"ALFREDO",enabled:true)
+                def usu3 = new Usuario(nombre:"ALEJANDRO",empresa:"IMPULSO",username:"ALEJANDRO",password:"ALEJANDRO",enabled:true)
                 
-                ofi6.addToUsuarios(usu1)
-                ofi2.addToUsuarios(usu2)
-                ofi3.addToUsuarios(usu3)
+                def usu4 = new Usuario(nombre:"BRENDA",empresa:"RDR",username:"BRENDA",password:"BRENDA",enabled:true)   
+                def usu5 = new Usuario(nombre:"BRUNO",empresa:"RDR",username:"BRUNO",password:"BRUNO",enabled:true) 
                 
-                ofi1.save(failOnError: true)
-                ofi2.save(failOnError: true)
-                ofi3.save(failOnError: true)
-                ofi4.save(failOnError: true)
-                ofi5.save(failOnError: true)
-                ofi6.save(failOnError: true)
-                ofi7.save(failOnError: true)
+                def usu6 = new Usuario(nombre:"BERENICE",empresa:"RDR",username:"BERENICE",password:"BERENICE",enabled:true) 
+                def usu7 = new Usuario(nombre:"BIANCA",empresa:"RDR",username:"BIANCA",password:"BIANCA",enabled:true) 
+                
+                def usu8 = new Usuario(nombre:"CESAR",empresa:"SEDENA",username:"CESAR",password:"CESAR",enabled:true)
+                def usu9 = new Usuario(nombre:"CAMILO",empresa:"SEDENA",username:"CAMILO",password:"CAMILO",enabled:true)
+                
+       
+                usu4.oficina = ofi3
+                usu5.oficina = ofi3
+                usu6.oficina = ofi6
+                usu7.oficina = ofi6
             
+                usu1.rol = adminIRole
+                usu2.rol = operaIRole
+                usu3.rol = operaIRole
             
-                SecUserSecRole.create usu1, operaIRole
-                SecUserSecRole.create usu2, operaPRole
-                SecUserSecRole.create usu3, operaPRole
+                usu4.rol = operaPRole
+                usu5.rol = superPRole
+                usu6.rol = operaPRole
+                usu7.rol = superPRole
+            
+                usu8.rol = consuSRole
+                usu9.rol = consuSRole
+            
+                usu1.save(failOnError: true)
+                usu2.save(failOnError: true)
+                usu3.save(failOnError: true)
+                usu4.save(failOnError: true)
+                usu5.save(failOnError: true)
+                usu6.save(failOnError: true)
+                usu7.save(failOnError: true)
+                usu8.save(failOnError: true)
+                usu9.save(failOnError: true)
+            
+                SecUserSecRole.create usu1, adminIRole
+                SecUserSecRole.create usu2, operaIRole
+                SecUserSecRole.create usu3, operaIRole
+                
+                SecUserSecRole.create usu4, operaPRole
+                SecUserSecRole.create usu5, superPRole
+                
+                SecUserSecRole.create usu6, operaPRole
+                SecUserSecRole.create usu7, superPRole
+                
+                SecUserSecRole.create usu8, consuSRole
+                SecUserSecRole.create usu9, consuSRole
                 
             }
         
@@ -208,11 +240,11 @@ class BootStrap {
         // Menu
         if (!GrupoMenu.count()) {
             new GrupoMenu(codigo: "1",nombre: "ADMIN",ruta: "/index.html").save(failOnError: true)
-            new GrupoMenu(codigo: "2",nombre: "OPERACION",ruta: "/index.html").save(failOnError: true)
+            new GrupoMenu(codigo: "2",nombre: "OPERACION \n y CONSULTA",ruta: "/index.html").save(failOnError: true)
             new GrupoMenu(codigo: "3",nombre: "REPORTES",ruta: "/index.html").save(failOnError: true)
         }
         
-        // Menu Items
+       // Menu Items
         if (!ItemGrupoMenu.count()) {
             def gm1 = GrupoMenu.find("from GrupoMenu as gm where gm.codigo='1'")
             gm1.addToItems(new ItemGrupoMenu(codigo: "1.1",nombre: "AXULIARES AUDITIVOS",ruta: "auxiliarAuditivo/list"))

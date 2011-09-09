@@ -13,12 +13,24 @@ function calendarioCita(x)
         dateFormat: 'yy-mm-dd'  //'d-M-yy'
     });     
 }
+function calendarioBuscarCita(x)
+{
+    $(x).datepicker({
+        dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+        maxDate: '+2y +0m +0w +0d',
+        minDate: '-2y -0m -0w -0d',
+        dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+        monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+        monthNamesShort: ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'], 
+        dateFormat: 'yy-mm-dd'  //'d-M-yy'
+    });     
+}
 function calendarioReceta(x)
 {
     $(x).datepicker({
         dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
         maxDate: '+0y +0m +0w +0d',
-        minDate: '-0y -6m -0w -0d',
+        minDate: '-1y -1m -0w -0d',
         dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
         monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
         monthNamesShort: ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'], 
@@ -44,6 +56,8 @@ function guardarCita() {
         var v_nombre = $('#nombre').val();
         var v_apePaterno = $('#apePaterno').val();
         var v_apeMaterno = $('#apeMaterno').val();
+        var v_telefono = $('#telefono').val();
+        var v_celular = $('#celular').val();
         var v_fechaCita = $('#fechaCita').val();
         var v_horaCita = $('#horaCita').val();
         var v_tipoCita = $('#tipoCita').val();
@@ -58,6 +72,8 @@ function guardarCita() {
          'nombre='+v_nombre+
          '&apePaterno='+v_apePaterno+
          '&apeMaterno='+v_apeMaterno+
+         '&telefono='+v_telefono+
+         '&celular='+v_celular+
          '&fechaCita='+v_fechaCita+
          '&horaCita='+v_horaCita+        
          '&idTipoAuxAud='+v_idTipoAuxAud+
@@ -102,6 +118,8 @@ function guardarInfoCompletaPaciente() {
         var v_nombre = $('#nombre').val();
         var v_apePaterno = $('#apePaterno').val();
         var v_apeMaterno = $('#apeMaterno').val();
+        var v_telefono = $('#telefono').val();
+        var v_celular = $('#celular').val();
         var v_edad = $('#edad').val();
         var v_sexo = $("#sexo option:selected").text() 
         var v_idTipoPaciente = $("#tipoPaciente option:selected").val() 
@@ -139,6 +157,8 @@ function guardarInfoCompletaPaciente() {
          '&nombre='+v_nombre+
          '&apePaterno='+v_apePaterno+
          '&apeMaterno='+v_apeMaterno+
+         '&telefono='+v_telefono+
+         '&celular='+v_celular+
          '&edad='+v_edad+
          '&sexo='+v_sexo+
          '&idTipoPaciente='+v_idTipoPaciente+        
@@ -170,7 +190,7 @@ function guardarInfoCompletaPaciente() {
 }
 
 function validarCompletarPaciente() {
-    console.log("validarCompletatPaciente()")
+    console.log("validarCompletarPaciente()")
     
     var v_nombre = $('#nombre').val();
     var v_apePaterno = $('#apePaterno').val();
@@ -215,18 +235,39 @@ function validarRegistrarDireccion() {
 function validarRegistrarReceta() {
     console.log("validarRegistrarReceta()")
     var v_fechaReceta = $('#fechaReceta').val();
+    var v_fechaActual = $('#fechaActual').val();
     var v_folio = $('#folio').val();
     var v_matricula = $('#matricula').val();
     console.log("v_fechaReceta",v_fechaReceta)
+    console.log("v_fechaActual",v_fechaActual)
     console.log("v_folio",v_folio)
     console.log("v_matricula",v_matricula)
+    
+    var fechaReceta = Date.parse(v_fechaReceta);
+    var fechaActual = Date.parse(v_fechaActual);
+    
+    var v_seg365d = (1000*60*60*24*365)  //Son 365 días
+    var fecha365dAntes = (Date.parse(v_fechaActual))-v_seg365d;
+    
+    console.log("fechaReceta    : ",fechaReceta)
+    console.log("fechaActual    : ",fechaActual)
+    console.log("v_seg365d      : ",v_seg365d)
+    console.log("fecha365dAntes : ",fecha365dAntes)
+    
     if(v_fechaReceta=="" || 
         v_folio=="" ||
         v_matricula=="") {
         alert("Faltan datos de Receta.");
         return false;
     }else {
-        return true;
+        if(fecha365dAntes<fechaReceta) {
+            return true;
+        }else {
+            alert("fechaReceta"+fechaReceta)
+             alert("fecha365dAntes"+fecha365dAntes)
+             alert("La fecha de la Receta es Mayor a 1 año \n por lo tanto es invalida.");
+        return false;
+        }
     }
 }
 
@@ -248,6 +289,57 @@ function validarRegistrarMedicoMilitar() {
 }
 
 
+/* Consultar Reportes */
+function consultarReportes() {
+    if(validarConsultarReportes()) {
+        var v_ruta = "";
+        var v_idEstado   = $("#estado option:selected").val()
+        var v_idTipoAuxAud   = $("#tipoAuxAud option:selected").val()
+        var v_idOficina   = $("#oficina option:selected").val()
+        var v_fechaInicio = $('#fechaInicio').val();
+        var v_fechaFin = $('#fechaFin').val();
+        v_ruta += 'reporte/consultarReportes'
+        v_ruta += '?idEstado='+v_idEstado
+        v_ruta += '&idTipoAuxAud='+v_idTipoAuxAud
+        v_ruta += '&idOficina='+v_idOficina
+        v_ruta += '&fechaInicio='+v_fechaInicio
+        v_ruta += '&fechaFin='+v_fechaFin
+         $.post(v_ruta,
+        function(data){$("div#contenidoCentro").html(data);});  
+    }
+}
+
+
+function validarConsultarReportes() {
+    console.log("validarGenerarReportes()")
+    
+    var v_idEstado   = $("#estado option:selected").val()
+    var v_fechaInicio = $('#fechaInicio').val();
+    var v_fechaFin = $('#fechaFin').val();
+    var v_idTipoAuxAud = $("#tipoAuxAud option:selected").val()
+    var v_idOficina = $("#oficina option:selected").val() 
+    
+    console.log("v_idEstado",v_idEstado)
+    console.log("v_fechaInicio",v_fechaInicio)
+    console.log("v_fechaFin",v_fechaFin)
+    console.log("v_idTipoAuxAud",v_idTipoAuxAud)
+    console.log("v_idOficina",v_idOficina)
+    
+    if(v_idEstado=="" && v_fechaInicio=="" &&
+        v_fechaFin=="" && v_idTipoAuxAud=="" &&
+        v_idOficina=="") {
+        alert("Favor de ingresar parámetros de búsqueda.");
+        return false;
+    }else if (v_fechaInicio=="" && v_fechaFin!="") {
+        alert("Favor de ingresar Fecha de inicio.");
+        return false;
+    }else {
+        return true;
+    }
+}
+
+
+/* Validaciones de campos*/
 
 function validarCampo(x,tipo,nombre) {
     var v_valor = $(x).val();
@@ -255,7 +347,7 @@ function validarCampo(x,tipo,nombre) {
     var mensaje = null;
     
     if(tipo == 'texto') {
-        expreg = new RegExp("^[a-zñA-ZÑ.,:0-9\. ]{3,}$");
+        expreg = new RegExp("^[A-ZÑ.,:0-9-\. ]{3,}$");
         mensaje="";
     }
     if(tipo == 'serie') {
@@ -271,7 +363,7 @@ function validarCampo(x,tipo,nombre) {
         mensaje="";
     }
     if(tipo == 'comentario') {
-        expreg = new RegExp("^[a-zñA-ZÑ.,:0-9-\. ]{5,}$")
+        expreg = new RegExp("^[A-ZÑ.,:0-9-\. ]{5,}$")
         mensaje="";
     }
      if(tipo == 'codigoPostal') {
@@ -288,6 +380,7 @@ function validarCampo(x,tipo,nombre) {
     }
 }
 
+/* buscar citas */
 
 function buscarCitas(numCita) {
     console.log("buscarCitas")
@@ -300,16 +393,14 @@ function buscarCitas(numCita) {
     }else if (numCita == 2) {
         action = "listEntregaAA";
     }
-    
     if(validarBuscarCita()) {
-        
-        var v_fechaCita = null;
-        var v_nombre = null;
-        v_nombre = $('#nombre').val();
-        v_fechaCita = $('#fechaCita').val();
+        var v_fechaCita = $('#fechaCita').val();
+        var v_nombre = $('#nombre').val();
+        var v_idOficina = $("#oficina option:selected").val(); 
         
         $.post('cita/'+action+'?'+
             'nombre='+v_nombre+
+            '&idOficina='+v_idOficina+
             '&fechaCita='+v_fechaCita,
             function(data){
                 $("div#contenidoCentro").html(data);
@@ -319,14 +410,15 @@ function buscarCitas(numCita) {
 
 function validarBuscarCita() {
     console.log("validarBuscarCita()")
-    
     var v_nombre = $('#nombre').val();
     var v_fechaCita = $('#fechaCita').val();
-    
+    var v_idOficina = $("#oficina option:selected").val();
     console.log("v_nombre",v_nombre)
     console.log("v_fechaCita",v_fechaCita)
-   
-    if(v_nombre=="" && v_fechaCita=="") {
+    console.log("v_idOficina",v_idOficina)
+    if(v_nombre=="" && 
+        v_fechaCita=="" &&
+            v_idOficina=="") {
         alert("Falta ingresar parámetros de búsqueda.");
         return false;
     }else {
@@ -335,12 +427,69 @@ function validarBuscarCita() {
 }
 
 
+/* buscar pacientes */
+
+function buscarPacientes(empresa) {
+    console.log("empresa: ",empresa)
+    console.log("buscarPacientes")
+    if(validarBuscarPaciente()) {        
+        var v_nombre = $('#nombre').val();
+        var v_idTipoPaciente = $("#tipoPaciente option:selected").val();
+        var v_idOficina = $("#oficina option:selected").val(); 
+        var v_action = "list";
+        /*
+        if (empresa == "SEDENA") {
+            v_action = "list";
+        }else if (empresa == "RDR"){
+            v_action = "list";
+        }else if (empresa == "IMPULSO") {
+            v_action = "listExped";
+        }*/
+        
+        console.log("action: ",v_action)
+        
+        $.post('paciente/'+v_action+'?'+
+            'nombre='+v_nombre+
+            '&idOficina='+v_idOficina+
+            '&empresa='+empresa+
+            '&idTipoPaciente='+v_idTipoPaciente,
+            function(data){
+                $("div#contenidoCentro").html(data);
+            });  
+    }
+}
+
+function validarBuscarPaciente() {
+    console.log("validarBuscarPaciente()")
+    var v_nombre = $('#nombre').val();
+    var v_idTipoPaciente = $("#tipoPaciente option:selected").val();
+    var v_idOficina = $("#oficina option:selected").val(); 
+    
+    console.log("v_nombre: ",v_nombre)
+    console.log("v_idTipoPaciente: ",v_idTipoPaciente)
+    console.log("v_idOficina: ",v_idOficina)
+    
+    if(v_nombre=="" && 
+        v_idTipoPaciente=="" &&
+         v_idOficina=="") {
+        alert("Falta ingresar parámetros de búsqueda.");
+        return false;
+    }else {
+        return true;
+    }
+}
+
+
+
 function guardarStatusDocs2daCita() {
     console.log("guardarStatusDocs2daCita")
     var docs = $(".doc");
     var docsOK = true;
     var v_docs = "";
-    var check = $("#pacienteRecibe")
+    var check=$('input[name=pacienteRecibe]:radio')
+    /*var check = $("#pacienteRecibe")*/ 
+    
+    console.log("check: "+$(check).attr("checked"))
        
     if($(check).attr("checked") == true){
         for(i=0; i<docs.size(); i++) {
@@ -395,6 +544,7 @@ function guardarStatusDocs1erCita() {
     
     var docs = $(".doc");
     var docISSFAM = false;
+    var v_docs = "";
     
     for(i=0; i<docs.size(); i++) {
         if($(docs[i]).attr("codigo") == "ISSFAM") {
@@ -410,8 +560,7 @@ function guardarStatusDocs1erCita() {
     console.log("docISSFAM: "+docISSFAM)
     
     var docsOK = false;
-    
-    var v_docs = "";
+
     for(i=0; i<docs.size(); i++) {
         console.log("codigo: "+$(docs[i]).attr("codigo"))
         if($(docs[i]).attr("codigo") == "CARTA") {
@@ -419,19 +568,40 @@ function guardarStatusDocs1erCita() {
                 if(docISSFAM) {
                     docsOK = true;
                 }else {
-                    alert("Indicar ISSFAM o Carta de Afiliación.");
+                    alert("Falta Indicar Carta de Afiliación.");
                     docsOK = true;
                 }
             }else {
                 var v_fechaCarta = $('#fechaCarta').val();
+                var v_fechaActual = $('#fechaActual').val();
                 console.log("v_fechaCarta: "+v_fechaCarta)
                 if(v_fechaCarta == "") {
                     alert("Indicar fecha de vigencia.");
                     $('#fechaCarta').focus();
                     docsOK = false;
                 }else {
+                    
+                    var fechaCarta = Date.parse(v_fechaCarta);
+                    var fechaActual = Date.parse(v_fechaActual);
+                    var v_seg120d = (1000*60*60*24*120)  //Son 120 días
+                    var fecha120dAntes = (Date.parse(v_fechaActual))-v_seg120d;
+                    
+                    if(fecha120dAntes<fechaCarta) {
+                        docsOK = true;
+                        v_docs += "&fechaCarta='"+v_fechaCarta+"'"
+                    }else {
+                        alert("La Vigencia de la Carta es Mayor a 120 días  \n por lo tanto es invalida.");
+                        docsOK = false;
+                    }
+                }
+            }
+        }else if ($(docs[i]).attr("codigo") == "IFE") {
+            if($(docs[i]).attr("checked") == false) {
+                if(docISSFAM) {
                     docsOK = true;
-                    v_docs += "&fechaCarta='"+v_fechaCarta+"'"
+                }else {
+                    alert("Falta Indicar IFE.");
+                    docsOK = true;
                 }
             }
         }
@@ -439,42 +609,50 @@ function guardarStatusDocs1erCita() {
     
     console.log("docsOK: "+docsOK)
     
+    docsOK = validarOkAudiograma(docs)
+    
+    console.log("docsOK: "+docsOK)
+    
+    generarRutaVerificarDocs1erCita(docsOK,docs,v_docs)
+    
+}
+
+function validarOkAudiograma(docs) {
+    for(i=0; i<docs.size(); i++) {
+        if ($(docs[i]).attr("codigo") == "AUDIOGRAMA") {
+            if($(docs[i]).attr("checked") == false) {
+                return false;
+            }else {
+                return true;
+            }
+        }
+    }
+}
+
+
+function generarRutaVerificarDocs1erCita(docsOK,docs,v_docs) {
+    var v_idPaciente = $('#idPaciente').val()
+    var v_idCita = $('#idCita').val()
+    var v_fechaActual = $('#fechaActual').val()
+    
     if(docsOK) {
         for(i=0; i<docs.size(); i++) {
             console.log("doc: "+i+". codigo: "+$(docs[i]).attr("codigo")+" : "+$(docs[i]).attr("checked"))
-            if($(docs[i]).attr("codigo") == "CARTA"
-                || $(docs[i]).attr("codigo") == "ISSFAM") {
-            }else if($(docs[i]).attr("checked") == false) {
-                docsOK = false
-            }
             v_docs += "&"+$(docs[i]).attr("codigo")+"="+$(docs[i]).attr("checked")
         }
-        
-        var v_idPaciente = $('#idPaciente').val()
-        var v_idCita = $('#idCita').val()
-         
-        if(docsOK) {
-            console.log("guardarVerificarDocs")
-            var v_fechaActual = $('#fechaActual').val()
-           
-            
-            var v_ruta = 'cita/guardarVerificarDocs1erCita'
-            v_ruta += '?idPaciente='+v_idPaciente
-            v_ruta += '&idCita='+v_idCita
-            v_ruta += v_docs;     
-            $.post(v_ruta,
-                function(data){
-                    $("div#contenidoCentro").html(data);
-                });   
-        }else {
-            var secuencia = "1";
-            var razon="CANCELACION"
-            console.log("programarCita")
-            programarCita(razon,secuencia,docsOK,v_idPaciente,v_idCita);
-        }
+        var v_ruta = 'cita/guardarVerificarDocs1erCita'
+        v_ruta += '?idPaciente='+v_idPaciente
+        v_ruta += '&idCita='+v_idCita
+        v_ruta += v_docs;     
+        $.post(v_ruta,function(data){$("div#contenidoCentro").html(data);});   
     }else {
+        var secuencia = "1";
+        var razon="CANCELACION"
+        console.log("programarCita")
+        programarCita(razon,secuencia,docsOK,v_idPaciente,v_idCita);
+    }
 }
-}
+
 
 function programarCita(razon,secuencia,docsOK,idPaciente,idCita) {
     console.log("programarCita: razon: "+razon)
@@ -497,20 +675,29 @@ function programarCita(razon,secuencia,docsOK,idPaciente,idCita) {
 
 
 function guardarCitaProgramada() {
-    //console.log("guardarCitaProgramada")
+    console.log("guardarCitaProgramada")
+    var v_ruta = "";
+    
     var v_idPaciente = $('#idPaciente').val();
     var v_idCita = $('#idCita').val();
     var v_fechaCita = $('#fechaCita').val();
     var v_horaCita = $('#horaCita').val();
     var v_tipoCita = $('#tipoCita').val();
     var v_razon = $('#razon').val();
-    $.post('cita/guardarCitaProgramada?'+
-        'idPaciente='+v_idPaciente+
-        '&idCita='+v_idCita+
-        '&fechaCita='+v_fechaCita+
-        '&horaCita='+v_horaCita+
-        '&tipoCita='+v_tipoCita+
-        '&razon='+v_razon,
+
+    v_ruta += '?idPaciente='+v_idPaciente
+    v_ruta += '&idCita='+v_idCita
+    v_ruta += '&fechaCita='+v_fechaCita  
+    v_ruta += '&horaCita='+v_horaCita  
+    v_ruta += '&tipoCita='+v_tipoCita
+    v_ruta += '&razon='+v_razon
+    
+    if(v_razon=="CANCELACION") {
+        var v_razonCancelacion = $('#razonCancelacion').val();
+        v_ruta += '&razonCancelacion='+v_razonCancelacion
+    }
+    
+    $.post('cita/guardarCitaProgramada'+v_ruta,
         function(data){
             $("div#contenidoCentro").html(data);
         });  
@@ -521,10 +708,38 @@ function guardarDocumentarEntrega() {
     if(validarDocumentarEntrega()) {
         var v_pacRecibe = "";
         var v_nomRecibe = "";
-        var v_idAuxAud = "";
-        var v_idTipoAuxAud = "";
-        var v_noserie = "";
-        var v_oido = "";
+        
+        var v_auxAudEnt = "";
+        
+        var v_oidoIzq = $('input[name=oidoIzquierdo]:radio')
+        var v_oidoDer = $('input[name=oidoDerecho]:radio')
+        
+
+        if($(v_oidoIzq).attr("checked") == true) {
+            var v_idAuxAudIzq = $("#marcaIzquierdo option:selected").val()
+            var v_idTipoAuxAudIzq = $("#tipoAuxAudIzquierdo option:selected").val()
+            var v_noserieIzq = $("#serieIzquierdo").val()
+            v_auxAudEnt += "&oidoIzq=true"
+            v_auxAudEnt += "&idAuxAudIzq="+v_idAuxAudIzq
+            v_auxAudEnt += "&idTipoAuxAudIzq="+v_idTipoAuxAudIzq
+            v_auxAudEnt += "&noserieIzq="+v_noserieIzq
+        }else {
+            v_auxAudEnt += "&oidoIzq=false"
+        } 
+        
+          if($(v_oidoDer).attr("checked") == true) {
+            var v_idAuxAudDer = $("#marcaDerecho option:selected").val()
+            var v_idTipoAuxAudDer = $("#tipoAuxAudDerecho option:selected").val()
+            var v_noserieDer = $("#serieDerecho").val()
+            v_auxAudEnt += "&oidoDer=true"
+            v_auxAudEnt += "&idAuxAudDer="+v_idAuxAudDer
+            v_auxAudEnt += "&idTipoAuxAudDer="+v_idTipoAuxAudDer
+            v_auxAudEnt += "&noserieDer="+v_noserieDer
+        }else {
+            v_auxAudEnt += "&oidoDer=false"
+        } 
+        
+
         var v_firmaRecibido = "";
         var v_nivelServicio = "";
         var v_comentarios = "";
@@ -533,8 +748,8 @@ function guardarDocumentarEntrega() {
         var v_idPaciente = "";
         var v_idCita = "";
             
-        console.log("true")
-        var checkRecibe = $("#pacienteRecibe")
+        var checkRecibe=$('input[name=pacienteRecibe]:radio')
+        
         if($(checkRecibe).attr("checked") == true){
             v_pacRecibe = "true"
             v_nomRecibe = ""
@@ -542,10 +757,7 @@ function guardarDocumentarEntrega() {
             v_pacRecibe = "false"
             v_nomRecibe = $('#nombreRecibeAuxAud').val()
         }
-        v_idAuxAud = $("#marca option:selected").val()
-        v_idTipoAuxAud = $("#tipoAuxAud option:selected").val()
-        v_noserie = $("#serie").val()
-        v_oido = $("#oido option:selected").text()   
+
         for(i=0; i<checks.size(); i++) {
             console.log("check: "+i+". secuencia: "+$(checks[i]).attr("codigo")+" : "+$(checks[i]).attr("checked"))
             v_checks += "&"+$(checks[i]).attr("codigo")+"="+$(checks[i]).attr("checked")
@@ -565,10 +777,7 @@ function guardarDocumentarEntrega() {
         v_ruta += '&idCita='+v_idCita
         v_ruta += "&pacienteRecibe="+v_pacRecibe
         v_ruta += "&nombreRecibe="+v_nomRecibe
-        v_ruta += "&idAuxAud="+v_idAuxAud
-        v_ruta += "&idTipoAuxAud="+v_idTipoAuxAud
-        v_ruta += "&noSerie="+v_noserie
-        v_ruta += "&oido="+v_oido
+        v_ruta +=  v_auxAudEnt
         v_ruta += "&firmaRecibido="+v_firmaRecibido
         v_ruta += "&nivelServicio="+v_nivelServicio
         v_ruta += "&comentarios="+v_comentarios
@@ -586,11 +795,16 @@ function guardarDocumentarEntrega() {
 
 function validarDocumentarEntrega() {
     console.log("validarDocumentarEntrega")
-    var checkRecibe = $("#pacienteRecibe")
+    
+    var checkRecibe=$('input[name=pacienteRecibe]:radio')
     var checkFirma = $("#firmaRecibido")
-    var v_serie = $('#serie').val()
+    var v_serie_izq = $('#serieIzquierdo').val()
+    var v_serie_der = $('#serieDerecho').val()
     var checks = $(".check");  
     var retorno = true;
+  
+    var v_oidoIzq = $('input[name=oidoIzquierdo]:radio')
+    var v_oidoDer = $('input[name=oidoDerecho]:radio')
   
     if($(checkRecibe).attr("checked") == false){
         console.log("checkRecibe: ",$(checkRecibe).attr("checked"))
@@ -603,16 +817,26 @@ function validarDocumentarEntrega() {
             retorno = false 
         }
     }
-    if (v_serie=='') {
-        alert("Indicar el número de serie.")
-        $('#serie').focus()    
-        retorno = false 
+    if($(v_oidoIzq).attr("checked") == false 
+        && $(v_oidoDer).attr("checked") == false) {
+        alert("Indicar el oido u oidos .")  
+        retorno = false
+    }else {
+        if($(v_oidoIzq).attr("checked") == true) {
+            if (v_serie_izq=='') {
+                alert("Indicar Número de Serie del Auiliar del Oido Izquierdo.")  
+                $('#serieIzquierdo').focus()    
+                retorno = false 
+            }
+        }
+        if($(v_oidoDer).attr("checked") == true) {
+            if (v_serie_der=='') {
+                alert("Indicar Número de Serie del Auiliar del Oido Derecho.")  
+                $('#serieDerecho').focus()    
+                retorno = false 
+            }
+        }
     }
-    if ($(checkFirma).attr("checked") == false) {
-        alert("Falta que el paciente firme de recibido.")
-        $("#firmaRecibido").focus()    
-        retorno = false 
-    } 
     for(i=0; i<checks.size(); i++) {
         console.log("check: ",i,"- ",$(checks[i]).attr("necesario")," , ",$(checks[i]).attr("checked"))
         if($(checks[i]).attr("necesario") == "true") {
@@ -624,7 +848,11 @@ function validarDocumentarEntrega() {
             }
         }
     }
- 
+    if ($(checkFirma).attr("checked") == false) {
+        alert("Falta que el paciente firme de recibido.")
+        $("#firmaRecibido").focus()    
+        retorno = false 
+    } 
     return retorno  
 }
 
@@ -677,7 +905,7 @@ function enviarArchivo() {
 
    
  // validar precio de libro   
- 
+ /*
 function validarEsCampoPorcentDesc(x) {
     var min = 0.0;
     var max = 100.0;

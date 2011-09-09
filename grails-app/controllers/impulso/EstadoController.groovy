@@ -1,24 +1,31 @@
 package impulso
 
+import grails.plugins.springsecurity.Secured;
+
 class EstadoController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
-
+    def springSecurityService
+    
+    
     def index = {
         redirect(action: "list", params: params)
     }
 
+    
     def list = {
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
+        params.max = Math.min(params.max ? params.int('max') : 20, 20)
         [estadoInstanceList: Estado.list(params), estadoInstanceTotal: Estado.count()]
     }
 
+    @Secured(['ROLE_ADMIN_IM','IS_AUTHENTICATED_FULLY'])
     def create = {
         def estadoInstance = new Estado()
         estadoInstance.properties = params
         return [estadoInstance: estadoInstance]
     }
 
+    @Secured(['ROLE_ADMIN_IM','IS_AUTHENTICATED_FULLY'])
     def save = {
         def estadoInstance = new Estado(params)
         if (estadoInstance.save(flush: true)) {
@@ -30,6 +37,7 @@ class EstadoController {
         }
     }
 
+    @Secured(['ROLE_ADMIN_IM','IS_AUTHENTICATED_FULLY'])
     def show = {
         def estadoInstance = Estado.get(params.id)
         if (!estadoInstance) {
@@ -41,6 +49,7 @@ class EstadoController {
         }
     }
 
+    @Secured(['ROLE_ADMIN_IM','IS_AUTHENTICATED_FULLY'])
     def edit = {
         def estadoInstance = Estado.get(params.id)
         if (!estadoInstance) {
@@ -52,6 +61,7 @@ class EstadoController {
         }
     }
 
+    @Secured(['ROLE_ADMIN_IM','IS_AUTHENTICATED_FULLY'])
     def update = {
         def estadoInstance = Estado.get(params.id)
         if (estadoInstance) {
@@ -79,6 +89,7 @@ class EstadoController {
         }
     }
 
+    @Secured(['ROLE_ADMIN_IM','IS_AUTHENTICATED_FULLY'])
     def delete = {
         def estadoInstance = Estado.get(params.id)
         if (estadoInstance) {

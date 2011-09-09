@@ -3,6 +3,9 @@
   and open the template in the editor.
 -->
 <%@ page import="impulso.Cita" %>
+<%@ page import="impulso.Cita" %>
+<%@ page import="impulso.Cita" %>
+<%@ page import="java.util.Collections"%>
 <%@ page contentType="text/html;charset=UTF-8" %>
 
 
@@ -15,7 +18,6 @@
 java.text.SimpleDateFormat sdf=new java.text.SimpleDateFormat("yyyy-MM-dd")
 Date date = new Date() 
 String fechaActual = sdf.format(date)
-def documentos = citaInstance.estadoDocumentos.documentos
 %>
 
 <g:hiddenField name="fechaActual" id="fechaActual" value="${fechaActual}" />
@@ -26,25 +28,46 @@ def documentos = citaInstance.estadoDocumentos.documentos
 <div class="list" id="docs">
   <table>
     <tr>
-      <th>Documento</th>
-      <th>Características</th>
-      <th>Entregado</th>
+      <th >Documento</th>
+      <th >Características</th>
+      <th >Entregado</th>
     </tr>
-<% documentos.each() { %>
-    <tr>
-      <td>${it.documento.nombreDoc}</td>
+    <% def it = documentos.get("1")%>
+    <tr>  
+       <td>${it.documento.nombreDoc}</td>
       <td>${it.documento.caracteristicas}</td>
       <td><p align="center"><g:checkBox codigo="${it.documento.codigoDoc}" id="${it.id}" class="doc" value="${it.status}"/></p></td>
-  
-  <% 
-  if (it.documento.codigoDoc.equals("CARTA")) {%>
-    <td class="etiqueta">Vigencia</td>
-    <td>
-    <g:textField size="14" onmouseover="calendarioVigencia(this)" id="fechaCarta" name="fechaCarta" readonly="true" />*
-    </td>
-    <% } %>
     </tr>
-  <% } %>
+    <% it = documentos.get("2")%>
+    <tr>  
+        <td>${it.documento.nombreDoc}</td>
+      <td>${it.documento.caracteristicas}</td>
+      <td><p align="center"><g:checkBox codigo="${it.documento.codigoDoc}" id="${it.id}" class="doc" value="${it.status}"/></p></td>
+    </tr>
+      <% it = documentos.get("3")%>
+    <tr>  
+        <td>${it.documento.nombreDoc}</td>
+      <td>${it.documento.caracteristicas}</td>
+      <td><p align="center"><g:checkBox codigo="${it.documento.codigoDoc}" id="${it.id}" class="doc" value="${it.status}"/></p></td>
+    </tr>
+    <tr><td colspan="3"><p style="color:red">--------- En caso de no presentar ISSFAM ----------</p></td></tr>
+    <% it = documentos.get("4")%>
+    <tr>  
+        <td>${it.documento.nombreDoc}</td>
+      <td>${it.documento.caracteristicas}</td>
+      <td><p align="center"><g:checkBox codigo="${it.documento.codigoDoc}" id="${it.id}" class="doc" value="${it.status}"/></p></td>
+    </tr>
+    <% it = documentos.get("5")%>
+    <tr>  
+        <td>${it.documento.nombreDoc}</td>
+      <td>${it.documento.caracteristicas}</td>
+      <td><p align="center"><g:checkBox codigo="${it.documento.codigoDoc}" id="${it.id}" class="doc" value="${it.status}"/></p></td>
+<td class="etiqueta">Vigencia</td>
+    <td>
+    <g:textField size="12" onmouseover="calendarioVigencia(this)" id="fechaCarta" name="fechaCarta" readonly="true" />*
+    </td>
+    </tr>
+    
   </table>
 </div>
 <button type="button" style="font-size: 9px" onclick="javascript:guardarStatusDocs1erCita()">

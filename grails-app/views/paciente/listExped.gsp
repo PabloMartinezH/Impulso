@@ -1,9 +1,16 @@
 
 <%@ page import="impulso.Paciente" %>
+<%@ page import="impulso.TipoPaciente" %>
+<%@ page import="impulso.Oficina" %>
 
 
 <g:set var="entityName" value="${message(code: 'paciente.label', default: 'Paciente')}" />
 <script type="text/javascript"></script>    
+
+<%
+def tiposPaciente = TipoPaciente.list(sort:"codigo", order:"asc")
+def oficinas = Oficina.list(sort:"sucursal", order:"asc")
+%>
 
 <div class="nav">
   <span class="menuButton">
@@ -11,10 +18,46 @@
   </span>
 </div>
 
-<h1>Pacientes</h1>
+<h1>Expedientes de Pacientes</h1>
 
 <br/>
 
+
+<table>
+  <tr>
+    <td class="etiqueta">Nombre</td>
+    <td><g:textField name="nombre" onchange="validarCampo(this,'texto','Nombre')" size="20" maxlength="70"/></td>
+    <td class="etiqueta">Tipo</td>
+    <td><g:select name="tipoPaciente" id="tipoPaciente" from="${tiposPaciente}" value="${tipoPacienteInstance?.id}" optionKey="id" optionValue="nombre" noSelection="['': '']"  /></td>
+    <td class="etiqueta">Oficina</td>
+    <td><g:select name="oficina" id="oficina" from="${oficinas}" value="${oficina?.id}" optionKey="id" optionValue="sucursal" noSelection="['': '']"  /></td></td>
+    <td>
+      <span class="menuButton">
+        <button type="button" style="font-size: 9px" onclick="buscarPacientes('IMPULSO');">Buscar</button>
+      </span>
+    </td>
+  </tr>
+</table>
+
+<%
+if(pacienteInstanceList.isEmpty()) {
+%>
+<br/>
+<g:if test="${flash.message}">
+  <div class="message">${flash.message}</div>
+</g:if>
+<div class="List">
+  <table width="80%">
+    <tr>
+      <td>
+        <p align="center" style="font-size:12px">No hay pacientes a mostrar</p>
+      </td>
+    </tr>
+  </table>
+</div>
+<% } else { %>
+
+<br/>
 <g:if test="${flash.message}">
   <div class="message">${flash.message}</div>
 </g:if>
@@ -30,7 +73,7 @@
     <th>Aux. Aud.</th>
     <th>Estado</th>
     <th><g:message code="paciente.direccion.label" default="Dirección" /></th>
-    <th><g:message code="paciente.direccion.label" default="Expediente" /></th>
+    <th></th>
  </tr>
     </thead>
     <tbody>
@@ -61,26 +104,17 @@ ${fieldValue(bean: pacienteInstance, field: "sexo")}
         <td>
           <% if(pacienteInstance.direccion != null ) { %>
           <p style="font-size: 9x">
-${pacienteInstance.direccion.calle},
-Num. ${pacienteInstance.direccion.numExt},
-<%if(!(pacienteInstance.direccion.numInt).isEmpty()) {%>
-  Int. ${pacienteInstance.direccion.numInt},
-<% } %>
-Col. ${pacienteInstance.direccion.colonia},
-CP: ${pacienteInstance.direccion.cp},
-Ciudad: ${pacienteInstance.direccion.ciudad},
-${pacienteInstance.direccion.estado},
-${pacienteInstance.direccion.pais},
+${pacienteInstance.direccion.ciudad},
+${pacienteInstance.direccion.estado}
           </p>
   <% } %>
-        </td>
-        <td>
-          <button type="button" style="font-size: 9px" 
-                 onclick="javascript:cargaAlCentro('docs/altaExpediente?'+
-                    'idPaciente='+${pacienteInstance.id});">Subir</button>
         </td>
       </tr>
     </g:each>
     </tbody>
   </table>
 </div>
+<%}%>
+
+
+

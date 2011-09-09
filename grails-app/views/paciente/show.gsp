@@ -14,6 +14,11 @@
       Pacientes
     </a>
   </span> 
+  <span class="menuButton">
+    <a href="#" class="list" onclick="javascript:cargaAlCentro('reporte/generarReportes');">
+      Reportes
+    </a>
+  </span> 
 </div>
 
 
@@ -28,6 +33,27 @@
   <tbody >
 
     <tr>
+      <td class="etiqueta">
+        Expediente
+      </td>
+  <sec:ifAnyGranted roles="ROLE_ADMIN_IM,ROLE_OPERA_IM">
+      <td>
+          <button type="button" style="font-size: 9px" 
+                 onclick="javascript:cargaAlCentro('docs/altaExpediente?'+
+                    'idPaciente='+${pacienteInstance.id});">Expediente</button>
+        </td>
+        </sec:ifAnyGranted>
+  <sec:ifAnyGranted roles="ROLE_CONSUL_S,ROLE_OPERA_P,ROLE_SUPER_P">
+              <td>
+          <button type="button" style="font-size: 9px" 
+                 onclick="javascript:cargaAlCentro('docs/altaExpediente?'+
+                    'idPaciente='+${pacienteInstance.id});">Ver Exp.</button>
+        </td>
+        </sec:ifAnyGranted>
+    </tr>
+    
+    
+    <tr>
       <td class="etiqueta"><g:message code="paciente.nombre.label" default="Nombre" /></td>
 <td>${fieldValue(bean: pacienteInstance, field: "nombre")}</td> 
 </tr>
@@ -41,11 +67,28 @@
   
     <tr>
       <td class="etiqueta"><g:message code="paciente.apeMaterno.label" default="Ape Materno" /></td>
-  
 <td>${fieldValue(bean: pacienteInstance, field: "apeMaterno")}</td>
+</tr>
+
+<tr>
+      <td class="etiqueta"><g:message code="paciente.telefono.label" default="Telefono" /></td>
+<td>${fieldValue(bean: pacienteInstance, field: "telefono")}</td>
+</tr>
+
+<tr>
+      <td class="etiqueta"><g:message code="paciente.celular.label" default="Celular" /></td>
+<td>${fieldValue(bean: pacienteInstance, field: "celular")}</td>
+</tr>
+
+
+   <tr>
+      <td class="etiqueta"><g:message code="paciente.tipoPaciente.label" default="Tipo Paciente" /></td>
+  
+<td>${pacienteInstance?.tipoPaciente?.nombre}</td>
     
 </tr>
-  
+
+
     <tr>
       <td class="etiqueta"><g:message code="paciente.edad.label" default="Edad" /></td>
   
@@ -111,12 +154,7 @@ if ((folio != null) && (!folio.isEmpty())) {
     
 </tr>
 
-    <tr>
-      <td class="etiqueta"><g:message code="paciente.tipoPaciente.label" default="Tipo Paciente" /></td>
-  
-<td>${pacienteInstance?.tipoPaciente?.nombre}</td>
-    
-</tr>
+   
   
     <tr>
       <td class="etiqueta"><g:message code="paciente.citas.label" default="Citas" /></td>
@@ -126,6 +164,7 @@ if ((folio != null) && (!folio.isEmpty())) {
       <li>
       <g:formatDate format="dd-MMM-yyyy" date="${c?.fechaCita}" /> 
       - ${c?.horaCita}. 
+      - ${c?.tipoCita}. 
       Status: ${c?.status}
       </li>
     </g:each>
@@ -143,31 +182,19 @@ if ((folio != null) && (!folio.isEmpty())) {
     
 </tr>
   
-    <tr>
-      <td class="etiqueta"><g:message code="paciente.telefonos.label" default="Telefonos" /></td>
-  
-<td valign="top" style="text-align: left;" >
-  <ul>
-    <g:each in="${pacienteInstance.telefonos}" var="t">
-      <li><g:link controller="telefono" action="show" id="${t.id}">${t?.encodeAsHTML()}</g:link></li>
-    </g:each>
-  </ul>
-</td>
-    
-</tr>
 </tbody>
 </table>
   </div>
-
 <% if (pacienteInstance?.estado?.secuencia == 6) { %>
   <br/>
   <h2>Asignación de Auxiliar Auditivo</h2>
   <br/>
-  <div class="list" style="border-color: white" border="1">
-    <table>
+  
+  <div class="list">
+    <table style="border-color: white" border="1">
       <tr>
         <td class="etiqueta">Fecha de asignación</td>
-        <td><g:formatDate format="dd-MMM-yyyy" date="${pacienteInstance?.asigAuxAud?.fechaAsignacion}" /></td>
+        <td><g:formatDate format="dd-MMM-yyyy" date="${pacienteInstance.asigAuxAud.fechaAsignacion}" /></td>
       </tr>
             <tr>
         <td class="etiqueta">Paciente recibe Aux. Aud.</td>
@@ -195,53 +222,69 @@ if ((folio != null) && (!folio.isEmpty())) {
           <% } %>
         </td>
       </tr>
-
-      <tr>
-        <td colspan="2">Auxiliar Auditivo Entregado</td>
+</table>
+    
+    
+    <BR/>
+     <h2>Auxiliar Auditivo Entregado</h2>
+    <table style="border-color: white" border="1">
+      <g:each var="auxaudasig" in="${pacienteInstance?.asigAuxAud?.auxAudAsigns}">
+        <tr>
+        <td class="etiqueta">Oido</td>
+        <td>${auxaudasig.oido}</td>
       </tr>
       <tr>
         <td class="etiqueta">Marca</td>
-        <td>${pacienteInstance?.asigAuxAud?.auxAudAsign?.auxAud?.marca}</td>
+        <td>${auxaudasig?.auxAud?.marca}</td>
         </tr>
       <tr>
         <td class="etiqueta">Modelo</td>
-        <td>${pacienteInstance?.asigAuxAud?.auxAudAsign?.tipoAuxAud?.modelo}</td>
+        <td>${auxaudasig?.tipoAuxAud?.modelo}</td>
         </tr>
       <tr>
         <td class="etiqueta">Serie</td>
-        <td>${pacienteInstance?.asigAuxAud?.auxAudAsign?.serie}</td>
+        <td>${auxaudasig?.serie}</td>
         </tr>
-      <tr>
-        <td class="etiqueta">Oido</td>
-        <td>${pacienteInstance?.asigAuxAud?.auxAudAsign?.oido}</td>
-      </tr>
-      
+      </g:each>
    
-      
+       </table>
+    
+    <br/>
+     <h2>Checklist de Entrega</h2>
+    <TABLE style="border-color: white" border="1">
+      <% 
+        def hm = new HashMap()
+        def checks = pacienteInstance?.asigAuxAud?.estadoChecks?.checks
+        checks.each() {
+          hm.put(it.checkEntrega.secuencia,it)
+        }
+       for ( i in 1..(hm.size()) ) {
+          def check = hm.get(i)
+       %>  
       <tr>
-        <td colspan="2">Checklist de Entrega</td>
-      </tr>
-      <g:each in="${pacienteInstance?.asigAuxAud?.estadoChecks}" var="check">
-      <tr>
-        <td>
+        <td width="400px">
           ${check?.checkEntrega?.descripcion}
         </td>
         <td>
-          <% if (check) {%>
+          <% if (check?.status == true) {%>
             SI
           <% } else { %>
             NO
           <% } %>
         </td>
       </tr>
-      </g:each>
+      <% } %>
       <tr>
-        
-      </tr>
-      <td>Evaluación</td>
+        </table>
+    <br/>
+    
+    <h2>Evaluación</h2>
+    <TABLE style="border-color: white" border="1">
       <tr>
         <td class="etiqueta">Nivel de Servicio</td>
         <td>${pacienteInstance?.asigAuxAud?.nivelServicio}</td>
+      <TR/>
+      <TR>
         <td class="etiqueta">Comentarios</td>
         <td>${pacienteInstance?.asigAuxAud?.comentarios}</td>
       </tr>
@@ -250,7 +293,9 @@ if ((folio != null) && (!folio.isEmpty())) {
   
   <% } %>
   
+  
 <% if (pacienteInstance?.estado?.secuencia != 6) { %>
+  <sec:ifAnyGranted roles="ROLE_SUPER_P">
 <div class="nav">
   <span class="menuButton">
     <a class="edit" href="#" onclick="javascript:cargaAlCentro('paciente/edit/'+${pacienteInstance?.id});">
@@ -258,4 +303,5 @@ if ((folio != null) && (!folio.isEmpty())) {
     </a>
   </span> 
 </div>
+    </sec:ifAnyGranted>  
 <% } %>

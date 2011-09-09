@@ -1,24 +1,29 @@
 package impulso
 
+import grails.plugins.springsecurity.Secured;
+
 class TipoPacienteController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+    def springSecurityService
 
     def index = {
         redirect(action: "list", params: params)
     }
 
     def list = {
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
+        params.max = Math.min(params.max ? params.int('max') : 20, 20)
         [tipoPacienteInstanceList: TipoPaciente.list(params), tipoPacienteInstanceTotal: TipoPaciente.count()]
     }
 
+    @Secured(['ROLE_ADMIN_IM','IS_AUTHENTICATED_FULLY'])
     def create = {
         def tipoPacienteInstance = new TipoPaciente()
         tipoPacienteInstance.properties = params
         return [tipoPacienteInstance: tipoPacienteInstance]
     }
 
+    @Secured(['ROLE_ADMIN_IM','IS_AUTHENTICATED_FULLY'])
     def save = {
         def tipoPacienteInstance = new TipoPaciente(params)
         if (tipoPacienteInstance.save(flush: true)) {
@@ -30,6 +35,7 @@ class TipoPacienteController {
         }
     }
 
+    @Secured(['ROLE_ADMIN_IM','IS_AUTHENTICATED_FULLY'])
     def show = {
         def tipoPacienteInstance = TipoPaciente.get(params.id)
         if (!tipoPacienteInstance) {
@@ -41,6 +47,7 @@ class TipoPacienteController {
         }
     }
 
+    @Secured(['ROLE_ADMIN_IM','IS_AUTHENTICATED_FULLY'])
     def edit = {
         def tipoPacienteInstance = TipoPaciente.get(params.id)
         if (!tipoPacienteInstance) {
@@ -52,6 +59,7 @@ class TipoPacienteController {
         }
     }
 
+    @Secured(['ROLE_ADMIN_IM','IS_AUTHENTICATED_FULLY'])
     def update = {
         def tipoPacienteInstance = TipoPaciente.get(params.id)
         if (tipoPacienteInstance) {
@@ -79,6 +87,7 @@ class TipoPacienteController {
         }
     }
 
+    @Secured(['ROLE_ADMIN_IM','IS_AUTHENTICATED_FULLY'])
     def delete = {
         def tipoPacienteInstance = TipoPaciente.get(params.id)
         if (tipoPacienteInstance) {

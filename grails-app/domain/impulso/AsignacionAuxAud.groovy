@@ -8,14 +8,15 @@ class AsignacionAuxAud {
     String nivelServicio 
     String comentarios
     boolean firmaRecibido
-    AuxAudAsignado auxAudAsign
     EstadoChecks estadoChecks
     
     static belongsTo = [paciente:Paciente]
     
-     static mapping = {
-        auxAudAsign lazy:false
+    static hasMany = [auxAudAsigns:AuxAudAsignado]
+      
+    static mapping = {
         estadoChecks lazy:false
+        auxAudAsigns lazy:false
     }
     
     static constraints = {

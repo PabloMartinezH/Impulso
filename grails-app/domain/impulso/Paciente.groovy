@@ -8,6 +8,8 @@ class Paciente {
     String sexo
     String rango
     String procedencia
+    String telefono
+    String celular
     
     Direccion direccion
     TipoPaciente tipoPaciente
@@ -18,7 +20,7 @@ class Paciente {
     
     String oficina
     
-    static hasMany = [telefonos:Telefono,citas:Cita]
+    static hasMany = [citas:Cita]
     
     static mapping = {
         
@@ -28,8 +30,6 @@ class Paciente {
         estado lazy:false
         tipoAuxAud lazy:false
         asigAuxAud lazy:false
-        
-        telefonos lazy:false
         citas lazy:false
     }
     
@@ -41,6 +41,9 @@ class Paciente {
         sexo(nullable:true,blank:false,inList:["F","M"])
         rango(nullable:true,blank:true,inList:["SARGENTO","CABO","GENERAL","TENIENTE","SOLDADO","OTRO"])
         procedencia(nullable:true,blank:true,size:5..50)
+        telefono(nullable:true,size:2..50)
+        celular(nullable:true,size:2..50)
+        
         
         direccion(nullable:true)
         tipoPaciente(nullable:false)

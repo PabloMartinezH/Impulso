@@ -1,9 +1,12 @@
 package impulso
 
+import grails.plugins.springsecurity.Secured;
+
 class AuxiliarAuditivoController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
-
+    def springSecurityService
+    
     def index = {
         redirect(action: "list", params: params)
     }
@@ -13,12 +16,14 @@ class AuxiliarAuditivoController {
         [auxiliarAuditivoInstanceList: AuxiliarAuditivo.list(params), auxiliarAuditivoInstanceTotal: AuxiliarAuditivo.count()]
     }
 
+    @Secured(['ROLE_ADMIN_IM','IS_AUTHENTICATED_FULLY'])
     def create = {
         def auxiliarAuditivoInstance = new AuxiliarAuditivo()
         auxiliarAuditivoInstance.properties = params
         return [auxiliarAuditivoInstance: auxiliarAuditivoInstance]
     }
 
+    @Secured(['ROLE_ADMIN_IM','IS_AUTHENTICATED_FULLY'])
     def save = {
         def auxiliarAuditivoInstance = new AuxiliarAuditivo(params)
         if (auxiliarAuditivoInstance.save(flush: true)) {
@@ -30,6 +35,7 @@ class AuxiliarAuditivoController {
         }
     }
 
+    @Secured(['ROLE_ADMIN_IM','IS_AUTHENTICATED_FULLY'])
     def show = {
         def auxiliarAuditivoInstance = AuxiliarAuditivo.get(params.id)
         if (!auxiliarAuditivoInstance) {
@@ -41,6 +47,7 @@ class AuxiliarAuditivoController {
         }
     }
 
+    @Secured(['ROLE_ADMIN_IM','IS_AUTHENTICATED_FULLY'])
     def edit = {
         def auxiliarAuditivoInstance = AuxiliarAuditivo.get(params.id)
         if (!auxiliarAuditivoInstance) {
@@ -52,6 +59,7 @@ class AuxiliarAuditivoController {
         }
     }
 
+    @Secured(['ROLE_ADMIN_IM','IS_AUTHENTICATED_FULLY'])
     def update = {
         def auxiliarAuditivoInstance = AuxiliarAuditivo.get(params.id)
         if (auxiliarAuditivoInstance) {
@@ -79,6 +87,7 @@ class AuxiliarAuditivoController {
         }
     }
 
+    @Secured(['ROLE_ADMIN_IM','IS_AUTHENTICATED_FULLY'])
     def delete = {
         def auxiliarAuditivoInstance = AuxiliarAuditivo.get(params.id)
         if (auxiliarAuditivoInstance) {

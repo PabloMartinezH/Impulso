@@ -2,14 +2,30 @@
   To change this template, choose Tools | Templates
   and open the template in the editor.
 -->
-
-
+ <div class="nav">
+      <span class="menuButton"><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></span>
+    </div>
+<BR/>
 <h2>${mensaje}</h2>
 <br></br>
 <table>
   <g:hiddenField name="razon" id="razon" value="${razon}" />
   <g:hiddenField name="idCita" id="idCita" value="${citaInstance.id}" />
   <g:hiddenField name="idPaciente" id="idPaciente" value="${citaInstance.paciente.id}" />
+  <% if(razon.equals("CANCELACION")) { %>
+    <tr>
+    <td class="etiqueta">
+      Razón cancelación
+    </td>
+    <td>
+      <g:select 
+        name="razonCancelacion" 
+        from="${citaInstance.constraints.razonCancelacion.inList}" 
+        value="${citaInstance?.razonCancelacion}" 
+        valueMessagePrefix="cita.razonCancelacion"  />
+    </td>
+  </tr>
+  <% } %>
   <tr>
     <td class="etiqueta">
       Tipo Cita

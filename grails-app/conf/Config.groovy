@@ -105,14 +105,12 @@ fileuploader {
 }
 
 
-
-
 // Added by the Spring Security Core plugin:
 grails.plugins.springsecurity.userLookup.userDomainClassName = 'impulso.Usuario'
 grails.plugins.springsecurity.userLookup.authorityJoinClassName = 'impulso.SecUserSecRole'
 grails.plugins.springsecurity.authority.className = 'impulso.Rol'
 
+
 //grails cloudfoundry
 grails.plugin.cloudfoundry.username = "martinez.hdez.pablo@gmail.com"
 grails.plugin.cloudfoundry.password = "IMDCnI7M"
-

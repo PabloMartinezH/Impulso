@@ -1,24 +1,29 @@
 package impulso
 
+import grails.plugins.springsecurity.Secured;
+
 class EscalonServicioSanidadController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
-
+    def springSecurityService
+    
     def index = {
         redirect(action: "list", params: params)
     }
 
     def list = {
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
+        params.max = Math.min(params.max ? params.int('max') : 20, 20)
         [escalonServicioSanidadInstanceList: EscalonServicioSanidad.list(params), escalonServicioSanidadInstanceTotal: EscalonServicioSanidad.count()]
     }
 
+    @Secured(['ROLE_ADMIN_IM','IS_AUTHENTICATED_FULLY'])
     def create = {
         def escalonServicioSanidadInstance = new EscalonServicioSanidad()
         escalonServicioSanidadInstance.properties = params
         return [escalonServicioSanidadInstance: escalonServicioSanidadInstance]
     }
 
+    @Secured(['ROLE_ADMIN_IM','IS_AUTHENTICATED_FULLY'])
     def save = {
         def escalonServicioSanidadInstance = new EscalonServicioSanidad(params)
         if (escalonServicioSanidadInstance.save(flush: true)) {
@@ -30,6 +35,7 @@ class EscalonServicioSanidadController {
         }
     }
 
+    @Secured(['ROLE_ADMIN_IM','IS_AUTHENTICATED_FULLY'])
     def show = {
         def escalonServicioSanidadInstance = EscalonServicioSanidad.get(params.id)
         if (!escalonServicioSanidadInstance) {
@@ -41,6 +47,7 @@ class EscalonServicioSanidadController {
         }
     }
 
+    @Secured(['ROLE_ADMIN_IM','IS_AUTHENTICATED_FULLY'])
     def edit = {
         def escalonServicioSanidadInstance = EscalonServicioSanidad.get(params.id)
         if (!escalonServicioSanidadInstance) {
@@ -52,6 +59,7 @@ class EscalonServicioSanidadController {
         }
     }
 
+    @Secured(['ROLE_ADMIN_IM','IS_AUTHENTICATED_FULLY'])
     def update = {
         def escalonServicioSanidadInstance = EscalonServicioSanidad.get(params.id)
         if (escalonServicioSanidadInstance) {
@@ -79,6 +87,7 @@ class EscalonServicioSanidadController {
         }
     }
 
+    @Secured(['ROLE_ADMIN_IM','IS_AUTHENTICATED_FULLY'])
     def delete = {
         def escalonServicioSanidadInstance = EscalonServicioSanidad.get(params.id)
         if (escalonServicioSanidadInstance) {

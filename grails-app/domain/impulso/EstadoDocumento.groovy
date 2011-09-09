@@ -3,6 +3,7 @@ package impulso
 class EstadoDocumento {
     Documento documento
     boolean status
+    int ordenDoc
     String fechaVigencia
     
     static mapping = {
@@ -10,7 +11,9 @@ class EstadoDocumento {
     }
     
     static constraints = {
+        ordenDoc(blank:false,range:1..20)
         status(blank:false)
         fechaVigencia(nullable:true,blank:false)
     }
+    
 }

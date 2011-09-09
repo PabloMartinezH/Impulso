@@ -26,49 +26,77 @@
 
 <div class="list">
   <h2>Paciente</h2>
+  <br/>
 <table style="border-color: white" border="1">
-  </tr>
-    <tr>
-    <td class="etiqueta">¿Es el paciente quien recibe el Aux. Aud.?</td>
-     <td>
-      <g:checkBox id="pacienteRecibe" name="pacienteRecibe" value="${false}" />*
-    </td>
-  </tr>
   <tr>
+    <td class="etiqueta">¿Es el paciente quien recibe el Aux. Aud.? *</td>
+    <td>
+       &nbsp; &nbsp; Si.....<input type="radio"  name="pacienteRecibe" value="${true}" checked="checked"/> 
+       &nbsp; &nbsp; No....<input type="radio"  name="pacienteRecibe" value="${false}"/>
+    </td>
+  <tr>
+    <tr>
     <td class="etiqueta">Nombre de quien recibe el Aux. Aud.</td>
-    <td><g:textField size="30" onchange="validarCampo(this,'texto','Nombre')" id="nombreRecibeAuxAud" name="nombreRecibeAuxAud" />*(Si es diferente la paciente)</td>
+    <td><g:textField size="30" onchange="validarCampo(this,'texto','Nombre')" id="nombreRecibeAuxAud" name="nombreRecibeAuxAud" />*(Si es diferente al paciente)</td>
   </tr>
-</table>
-</div>
-  
+    </table>
+  </div>
 <br/>
 <br/>
+
 <div class="list">
   <h2>Áuxiliar Auditivo Entregado</h2>
   <table style="border-color: white" border="1">
     <tr>
-        <td class="etiqueta">Marca</td>
+      <td class="etiqueta" size="40px">Oido Derecho</td>  
+      <td>
+         &nbsp; &nbsp; Si.....<input type="radio"  name="oidoDerecho" value="${true}" /> 
+         &nbsp; &nbsp; No....<input type="radio"  name="oidoDerecho" value="${false}" checked="checked"/>
+      </td>
+    </tr>
+    <tr>
+        <td class="etiqueta" size="100px">Marca</td>
         <td>
-        <g:select name="marca" id="marca" from="${auxsAuditivosInstance}" value="${auxAudInstance?.id}" optionKey="id" optionValue="marca"  />*
+        <g:select name="marcaDerecho" id="marcaDerecho" from="${auxsAuditivosInstance}" value="${auxAudInstance?.id}" optionKey="id" optionValue="marca"  />*
         </td>
   </tr>
   
   <tr>
-        <td class="etiqueta">Modelo</td>
+        <td class="etiqueta" size="20px">Modelo</td>
         <td>
-        <g:select name="tipoAuxAud" id="tipoAuxAud" from="${impulso.TipoAuxAud.list()}" value="${pacienteInstance.tipoAuxAud}" optionValue="modelo"  optionKey="id" />
+        <g:select name="tipoAuxAudDerecho" id="tipoAuxAudDerecho" from="${impulso.TipoAuxAud.list()}" value="${pacienteInstance.tipoAuxAud}" optionValue="modelo"  optionKey="id" />
         </td>
   </tr>
       <tr>
-        <td class="etiqueta">No. Serie</td>
-        <td><g:textField size="30" onchange="validarCampo(this,'serie','Serie')" id="serie" name="serie" />*</td>
+        <td class="etiqueta" size="20px">No. Serie</td>
+        <td><g:textField size="30" onchange="validarCampo(this,'serie','Serie')" id="serieDerecho" name="serieDerecho" />*</td>
+  </table>
+  
+  <br/>
+  <table style="border-color: white" border="1">
+    <tr>
+      <td class="etiqueta" size="40px">Oido Izquierdo</td>  
+      <td>
+         &nbsp; &nbsp; Si.....<input type="radio"  name="oidoIzquierdo" value="${true}" /> 
+         &nbsp; &nbsp; No....<input type="radio"  name="oidoIzquierdo" value="${false}" checked="checked"/>
+      </td>
+    </tr>
+    <tr>
+        <td class="etiqueta" size="100px">Marca</td>
+        <td>
+        <g:select name="marcaIzquierdo" id="marcaIzquierdo" from="${auxsAuditivosInstance}" value="${auxAudInstance?.id}" optionKey="id" optionValue="marca"  />*
+        </td>
+  </tr>
+  
+  <tr>
+        <td class="etiqueta" size="20px">Modelo</td>
+        <td>
+        <g:select name="tipoAuxAudIzquierdo" id="tipoAuxAudIzquierdo" from="${impulso.TipoAuxAud.list()}" value="${pacienteInstance.tipoAuxAud}" optionValue="modelo"  optionKey="id" />
+        </td>
   </tr>
       <tr>
-        <td class="etiqueta">Oido</td>
-        <td>
-        <g:select name="oido" id="oido" from="${auxAudAsignadoInstance.constraints.oido.inList}" value="${auxAudAsignadoInstance?.oido}" />*
-        </td>
-  </tr> 
+        <td class="etiqueta" size="20px">No. Serie</td>
+        <td><g:textField size="30" onchange="validarCampo(this,'serie','Serie')" id="serieIzquierdo" name="serieIzquierdo" />*</td>
   </table>
 </div>  
 

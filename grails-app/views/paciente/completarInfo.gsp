@@ -39,6 +39,14 @@ String fechaActual = sdf.format(date)
 
 <h2>Paciente</h2>
     <g:hiddenField name="idPaciente" id="idPaciente" value="${pacienteInstance.id}" />
+    
+    <% 
+java.text.SimpleDateFormat sdf1=new java.text.SimpleDateFormat("yyyy-MM-dd")
+Date date1 = new Date() 
+String fechaActual1 = sdf1.format(date1)
+%>
+    
+    <g:hiddenField name="fechaActual" id="fechaActual" value="${fechaActual1}" />
     <table>
       <tbody>
         <tr >
@@ -68,6 +76,26 @@ String fechaActual = sdf.format(date)
           </td>
         </tr>
       
+        
+       <tr>
+  <td class="etiqueta" width="100px">
+    <label for="telefono"><g:message code="paciente.telefono.label" default="Teléfono" /></label>
+  </td>
+  <td valign="top" class="value ${hasErrors(bean: pacienteInstance, field: 'telefono', 'errors')}">
+<g:textField name="telefono" onchange="validarCampo(this,'texto','Teléfono')" size="35" maxlength="70" value="${pacienteInstance?.telefono}" />
+</td>
+</tr>
+
+
+<tr>
+  <td class="etiqueta" width="100px">
+    <label for="celular"><g:message code="paciente.celular.label" default="Celular" /></label>
+  </td>
+  <td valign="top" class="value ${hasErrors(bean: pacienteInstance, field: 'celular', 'errors')}">
+<g:textField name="celular" onchange="validarCampo(this,'texto','Celular')" size="35" maxlength="70" value="${pacienteInstance?.celular}" />
+</td>
+</tr> 
+
         <tr >
           <td class="etiqueta">
             <label for="edad"><g:message code="paciente.edad.label" default="Edad" /></label>

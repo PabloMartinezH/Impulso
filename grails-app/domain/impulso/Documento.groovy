@@ -14,4 +14,5 @@ class Documento {
         nombreDoc(blank:false,size:5..50)
         caracteristicas(blank:false,size:5..100)
     }
+
 }

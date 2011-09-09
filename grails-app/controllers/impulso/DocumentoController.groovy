@@ -1,24 +1,29 @@
 package impulso
 
+import grails.plugins.springsecurity.Secured;
+
 class DocumentoController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
-
+    def springSecurityService
+    
     def index = {
         redirect(action: "list", params: params)
     }
 
     def list = {
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
+        params.max = Math.min(params.max ? params.int('max') : 50, 50)
         [documentoInstanceList: Documento.list(params), documentoInstanceTotal: Documento.count()]
     }
 
+    @Secured(['ROLE_ADMIN_IM','IS_AUTHENTICATED_FULLY'])
     def create = {
         def documentoInstance = new Documento()
         documentoInstance.properties = params
         return [documentoInstance: documentoInstance]
     }
 
+    @Secured(['ROLE_ADMIN_IM','IS_AUTHENTICATED_FULLY'])
     def save = {
         def documentoInstance = new Documento(params)
         if (documentoInstance.save(flush: true)) {
@@ -30,6 +35,7 @@ class DocumentoController {
         }
     }
 
+    @Secured(['ROLE_ADMIN_IM','IS_AUTHENTICATED_FULLY'])
     def show = {
         def documentoInstance = Documento.get(params.id)
         if (!documentoInstance) {
@@ -41,6 +47,7 @@ class DocumentoController {
         }
     }
 
+    @Secured(['ROLE_ADMIN_IM','IS_AUTHENTICATED_FULLY'])
     def edit = {
         def documentoInstance = Documento.get(params.id)
         if (!documentoInstance) {
@@ -52,6 +59,7 @@ class DocumentoController {
         }
     }
 
+    @Secured(['ROLE_ADMIN_IM','IS_AUTHENTICATED_FULLY'])
     def update = {
         def documentoInstance = Documento.get(params.id)
         if (documentoInstance) {
@@ -79,6 +87,7 @@ class DocumentoController {
         }
     }
 
+    @Secured(['ROLE_ADMIN_IM','IS_AUTHENTICATED_FULLY'])
     def delete = {
         def documentoInstance = Documento.get(params.id)
         if (documentoInstance) {

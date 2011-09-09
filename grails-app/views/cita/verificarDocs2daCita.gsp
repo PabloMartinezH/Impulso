@@ -5,7 +5,9 @@
 <%@ page import="impulso.Cita" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 
-
+<div class="nav">
+  <span class="menuButton"><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></span>
+</div>
 
 <h1>Verificar Documentos</h1>
 
@@ -13,7 +15,7 @@
 java.text.SimpleDateFormat sdf=new java.text.SimpleDateFormat("yyyy-MM-dd")
 Date date = new Date() 
 String fechaActual = sdf.format(date)
-def documentos = citaInstance.estadoDocumentos.documentos
+//def documentos = citaInstance.estadoDocumentos.documentos
 %>
 
 <g:hiddenField name="fechaActual" id="fechaActual" value="${fechaActual}" />
@@ -22,15 +24,17 @@ def documentos = citaInstance.estadoDocumentos.documentos
 
 <br></br>
 
-<table>
+<table style="border-color: white" border="1">
   <tr>
-    <td class="etiqueta">¿El Auxiliar Auditivo se entregará directamente al paciente?</td>
+    <td class="etiqueta">¿Es el paciente quien recibe el Aux. Aud.? *</td>
     <td>
-      <g:checkBox id="pacienteRecibe" value="" />
+       &nbsp; &nbsp; Si.....<input type="radio"  name="pacienteRecibe" value="${true}" checked="checked"/> 
+       &nbsp; &nbsp; No....<input type="radio"  name="pacienteRecibe" value="${false}"/>
     </td>
-  </tr>
-</table>
+  <tr>
+    </table>
 
+<br/>
 <br/>
 
 <div class="list" id="docs">  
@@ -40,12 +44,39 @@ def documentos = citaInstance.estadoDocumentos.documentos
       <th>Características</th>
       <th>Entregado</th>
     </tr>
-<% documentos.each() { %>
-    <tr>
-      <td>${it.documento.nombreDoc}</td>
+
+    <% def it = documentos.get("6")%>
+    <tr>  
+       <td>${it.documento.nombreDoc}</td>
       <td>${it.documento.caracteristicas}</td>
       <td><p align="center"><g:checkBox codigo="${it.documento.codigoDoc}" id="${it.id}" class="doc" value="${it.status}"/></p></td>
-  <% } %>
+    </tr>
+    <% it = documentos.get("7")%>
+    <tr>  
+       <td>${it.documento.nombreDoc}</td>
+      <td>${it.documento.caracteristicas}</td>
+      <td><p align="center"><g:checkBox codigo="${it.documento.codigoDoc}" id="${it.id}" class="doc" value="${it.status}"/></p></td>
+    </tr>
+    <tr><td colspan="3"><p style="color:red">--------- En caso de no ser el Paciente quien Recibe el Auxiliar Auditivo ----------</p></td></tr>
+    <% it = documentos.get("8")%>
+    <tr>  
+       <td>${it.documento.nombreDoc}</td>
+      <td>${it.documento.caracteristicas}</td>
+      <td><p align="center"><g:checkBox codigo="${it.documento.codigoDoc}" id="${it.id}" class="doc" value="${it.status}"/></p></td>
+    </tr>
+    <% it = documentos.get("9")%>
+    <tr>  
+       <td>${it.documento.nombreDoc}</td>
+      <td>${it.documento.caracteristicas}</td>
+      <td><p align="center"><g:checkBox codigo="${it.documento.codigoDoc}" id="${it.id}" class="doc" value="${it.status}"/></p></td>
+    </tr>
+    <% it = documentos.get("10")%>
+    <tr>  
+       <td>${it.documento.nombreDoc}</td>
+      <td>${it.documento.caracteristicas}</td>
+      <td><p align="center"><g:checkBox codigo="${it.documento.codigoDoc}" id="${it.id}" class="doc" value="${it.status}"/></p></td>
+    </tr>
+   
   </table>
 </div>
 
@@ -55,5 +86,6 @@ Siguiente
 </button>  
 
 
-<br></br>
+<br/>
+<br/>
 <div id="programarCita" style="border:1px solid #3579DC"></div>

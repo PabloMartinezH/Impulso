@@ -38,23 +38,22 @@
 </tr>
   
     <tr>
-      <td class="etiqueta"><g:message code="auxiliarAuditivo.modeloAA.label" default="Modelo AA" /></td>
+      <td class="etiqueta"><g:message code="auxiliarAuditivo.marca.label" default="Marca" /></td>
   
-<td>${fieldValue(bean: auxiliarAuditivoInstance, field: "modeloAA")}</td>
+<td>${fieldValue(bean: auxiliarAuditivoInstance, field: "marca")}</td>
     
 </tr>
   
     <tr>
-      <td class="etiqueta"><g:message code="auxiliarAuditivo.numeroAA.label" default="Numero AA" /></td>
+      <td class="etiqueta"><g:message code="auxiliarAuditivo.tiposAuxAud.label" default="Tipos Aux Aud" /></td>
   
-<td>${fieldValue(bean: auxiliarAuditivoInstance, field: "numeroAA")}</td>
-    
-</tr>
-  
-    <tr>
-      <td class="etiqueta"><g:message code="auxiliarAuditivo.nombreAA.label" default="Nombre AA" /></td>
-  
-<td>${fieldValue(bean: auxiliarAuditivoInstance, field: "nombreAA")}</td>
+<td valign="top" style="text-align: left;" >
+  <ul>
+    <g:each in="${auxiliarAuditivoInstance.tiposAuxAud}" var="t">
+      <li><g:link controller="tipoAuxAud" action="show" id="${t.id}">${t?.encodeAsHTML()}</g:link></li>
+    </g:each>
+  </ul>
+</td>
     
 </tr>
   

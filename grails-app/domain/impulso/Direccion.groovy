@@ -14,12 +14,12 @@ class Direccion {
     static belongsTo = [paciente:Paciente]  
     
     static constraints = {
-        calle(blank:false,size:5..100)
+        calle(blank:false,size:2..100)
         numExt(blank:false,size:1..25)
         numInt(blank:true,size:1..25)
-        colonia(blank:false,size:5..100)
+        colonia(blank:false,size:2..100)
         cp(blank:false,size:5..5)
-        ciudad(blank:false,size:1..100)
+        ciudad(blank:false,size:2..100)
         pais(blank:false,inList:["MEXICO"])
         estado(blank:false,inList:[
         "AGUASCALIENTES",

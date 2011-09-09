@@ -14,6 +14,8 @@ class Cita {
     String tipoCita
     int numeroCita
     String status
+    
+    String razonCancelacion
 
     EstadoDocumentos estadoDocumentos
     
@@ -54,6 +56,11 @@ class Cita {
         horas.add("19:30")
         horas.add("20:00")
         
+        ArrayList<String> razones = new ArrayList<String>()
+        razones.add("Falta de documentos requeridos.")
+        razones.add("El paciente no llegó a la cita")
+        razones.add("El paciente llegó tarde a la cita")
+
         
         fechaRegistro(blank:false)
         horaRegistro(blank:false)
@@ -64,6 +71,7 @@ class Cita {
         fechaReal(nullable:true,blank:true)
         horaReal(nullable:true,blank:true)
         
+        razonCancelacion(nullable:true,inList:razones)
         status(blank:false,inList:["PROGRAMADA","REALIZADA","CANCELADA"])
         tipoCita(blank:false,inList:["ENTREGA DOCS Y MOLDES","ENTREGA AUXILIAR AUD"])
         numeroCita(blank:false,range:0..10)

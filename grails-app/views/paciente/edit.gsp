@@ -152,21 +152,6 @@ if ((folio != null) && (!folio.isEmpty())) {
     
 </tr>
     
-        <tr >
-          <td class="etiqueta">
-            <label for="telefonos"><g:message code="paciente.telefonos.label" default="Telefonos" /></label>
-          </td>
-          <td valign="top" class="value ${hasErrors(bean: pacienteInstance, field: 'telefonos', 'errors')}">
-    
-<ul>
-<g:each in="${pacienteInstance?.telefonos?}" var="t">
-    <li><g:link controller="telefono" action="show" id="${t.id}">${t?.encodeAsHTML()}</g:link></li>
-</g:each>
-</ul>
-<g:link controller="telefono" action="create" params="['paciente.id': pacienteInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'telefono.label', default: 'Telefono')])}</g:link>
-
-          </td>
-        </tr>
     
       </tbody>
     </table>

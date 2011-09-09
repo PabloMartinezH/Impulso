@@ -66,6 +66,12 @@
 <td>${fieldValue(bean: citaInstance, field: "status")}</td>
 </tr>
   
+<% if (citaInstance.status.equals("CANCELADA")) { %>
+<tr>
+      <td class="etiqueta"><g:message code="cita.razonCancelacion.label" default="Razón" /></td>
+<td>${fieldValue(bean: citaInstance, field: "razonCancelacion")}</td>
+</tr>
+<% } %>
 <% if (citaInstance.fechaReal != null) {%>
 <tr>
       <td colspan="6"></td>
@@ -101,11 +107,13 @@
 <br/>  
 <div class="nav">
   <% if((citaInstance?.status).equals("PROGRAMADA")) { %>
+  <sec:ifAnyGranted roles="ROLE_SUPER_P">
   <span class="menuButton">
     <a class="edit" href="#" onclick="javascript:cargaAlCentro('cita/edit/'+${citaInstance?.id});">
       <g:message code="default.button.edit.label" default="Edit"/>
       
     </a>
   </span> 
+  </sec:ifAnyGranted>
   <% } %>
 </div>

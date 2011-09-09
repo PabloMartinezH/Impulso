@@ -43,6 +43,27 @@ def pacienteInstance = new Paciente()
 <g:textField name="apeMaterno" onchange="validarCampo(this,'texto','Apellido Materno')" size="35" maxlength="70" value="${pacienteInstance?.apeMaterno}" />
 </td>
 </tr>
+
+<tr>
+  <td class="etiqueta" width="100px">
+    <label for="apeMaterno"><g:message code="paciente.telefono.label" default="Teléfono" /></label>
+  </td>
+  <td valign="top" class="value ${hasErrors(bean: pacienteInstance, field: 'telefono', 'errors')}">
+<g:textField name="telefono" onchange="validarCampo(this,'texto','Teléfono')" size="35" maxlength="70" value="${pacienteInstance?.telefono}" />
+</td>
+</tr>
+
+
+<tr>
+  <td class="etiqueta" width="100px">
+    <label for="apeMaterno"><g:message code="paciente.celular.label" default="Celular" /></label>
+  </td>
+  <td valign="top" class="value ${hasErrors(bean: pacienteInstance, field: 'celular', 'errors')}">
+<g:textField name="celular" onchange="validarCampo(this,'texto','Celular')" size="35" maxlength="70" value="${pacienteInstance?.celular}" />
+</td>
+</tr>
+
+
 <tr >
   <td class="etiqueta">
     <label for="sexo"><g:message code="paciente.sexo.label" default="Sexo" /></label>

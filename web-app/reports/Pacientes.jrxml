@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Pacientes" language="groovy" pageWidth="1490" pageHeight="200" orientation="Landscape" columnWidth="1450" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="602"/>
+	<property name="ireport.y" value="0"/>
+	<queryString language="SQL">
+		<![CDATA[select
+	p.nombre,
+	p.ape_paterno,
+	p.ape_materno,
+	p.oficina,
+	p.rango,
+	p.sexo,
+    p.oficina,
+	tp.nombre as tipoPaciente,
+	e.nombre as estadoProceso,
+	d.calle,
+	d.num_int,
+	d.num_ext,
+	d.colonia,
+	d.ciudad,
+	d.estado as edo,
+	d.pais,
+	taa.modelo
+
+ from
+	Impulso.estado e,
+	Impulso.paciente p,
+	Impulso.tipo_paciente tp,
+	Impulso.tipo_aux_aud taa,
+	Impulso.direccion d
+
+where ((e.secuencia=3 OR
+		e.secuencia=4 OR
+		e.secuencia=5 OR
+		e.secuencia=6)
+	and (p.estado_id=e.id)
+	and (tp.id = p.tipo_paciente_id)
+	and (d.id = p.direccion_id)
+	and (taa.id = p.tipo_aux_aud_id));]]>
+	</queryString>
+	<field name="nombre" class="java.lang.String"/>
+	<field name="ape_paterno" class="java.lang.String"/>
+	<field name="ape_materno" class="java.lang.String"/>
+	<field name="oficina" class="java.lang.String"/>
+	<field name="rango" class="java.lang.String"/>
+	<field name="sexo" class="java.lang.String"/>
+	<field name="tipoPaciente" class="java.lang.String"/>
+	<field name="estadoProceso" class="java.lang.String"/>
+	<field name="calle" class="java.lang.String"/>
+	<field name="num_int" class="java.lang.String"/>
+	<field name="num_ext" class="java.lang.String"/>
+	<field name="colonia" class="java.lang.String"/>
+	<field name="ciudad" class="java.lang.String"/>
+	<field name="edo" class="java.lang.String"/>
+	<field name="pais" class="java.lang.String"/>
+	<field name="modelo" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="29" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="9" width="100" height="20"/>
+				<textElement markup="none"/>
+				<text><![CDATA[Nombre]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="100" y="8" width="100" height="20"/>
+				<textElement markup="none"/>
+				<text><![CDATA[Ape Paterno]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="200" y="8" width="100" height="20"/>
+				<textElement markup="none"/>
+				<text><![CDATA[Ape Materno]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="300" y="9" width="88" height="20"/>
+				<textElement markup="none"/>
+				<text><![CDATA[Rango]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="388" y="8" width="48" height="20"/>
+				<textElement markup="none"/>
+				<text><![CDATA[Sexo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="500" y="8" width="100" height="20"/>
+				<textElement markup="none"/>
+				<text><![CDATA[Tipo Paciente]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="436" y="9" width="64" height="20"/>
+				<textElement markup="none"/>
+				<text><![CDATA[Oficina]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="600" y="9" width="100" height="20"/>
+				<textElement markup="none"/>
+				<text><![CDATA[Modelo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="700" y="8" width="100" height="20"/>
+				<textElement markup="none"/>
+				<text><![CDATA[Estado]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="800" y="9" width="100" height="20"/>
+				<textElement markup="none"/>
+				<text><![CDATA[Calle]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="900" y="8" width="83" height="20"/>
+				<textElement markup="none"/>
+				<text><![CDATA[Num. Ext]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="983" y="8" width="79" height="20"/>
+				<textElement markup="none"/>
+				<text><![CDATA[Num. Int]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1062" y="8" width="100" height="20"/>
+				<textElement markup="none"/>
+				<text><![CDATA[Colonia]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1162" y="9" width="100" height="20"/>
+				<textElement markup="none"/>
+				<text><![CDATA[Ciudad]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1262" y="9" width="100" height="20"/>
+				<textElement markup="none"/>
+				<text><![CDATA[Estado]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1362" y="8" width="100" height="20"/>
+				<textElement markup="none"/>
+				<text><![CDATA[País]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="21" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{nombre}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="100" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{ape_paterno}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="200" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{ape_materno}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="300" y="0" width="88" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{rango}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="388" y="1" width="48" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{sexo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="500" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{tipoPaciente}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="436" y="0" width="64" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{oficina}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="600" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{modelo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="700" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{estadoProceso}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="800" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{calle}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="983" y="1" width="79" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{num_int}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1062" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{colonia}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1162" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{ciudad}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1262" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{edo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1362" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{pais}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="900" y="1" width="83" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{num_ext}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>
